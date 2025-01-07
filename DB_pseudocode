@@ -1,0 +1,60 @@
+Table users {
+  id integer [primary key]
+  username string
+  email string
+  hashed_password string
+}
+
+Table user_friends {
+  id integer [primary key]
+  user_id integer
+  friend_id integer
+  accepted boolean
+}
+
+Table game_requests {
+  id integer [primary key]
+  game_id integer
+  user_id integer
+  opponent_id integer
+  message text [note: 'Message for opponent']
+  accepted boolean
+}
+
+Table games {
+  id integer [primary key]
+  game_data_id integer
+  host_id integer
+  opponent_id integer
+  host_color string
+  opponent_color string
+  status string
+}
+
+Table game_data {
+  id integer [primary key]
+  game_id integer
+  host_score integer
+  opponent_score integer
+  timer integer
+}
+
+Table game_board_tiles {
+  id integer [primary key]
+  game_data_id integer
+  value char
+  flag_color string
+  seen boolean
+  x_axis integer
+  y_axis integer
+}
+
+Ref: users.id < user_friends.user_id
+Ref: users.id < user_friends.friend_id
+Ref: users.id < game_requests.user_id
+Ref: users.id < game_requests.opponent_id
+Ref: games.id < game_requests.game_id
+Ref: games.id < game_data.game_id
+Ref: users.id < games.host_id
+Ref: users.id < games.opponent_id
+Ref: game_data.id < game_board_tiles.game_data_id
