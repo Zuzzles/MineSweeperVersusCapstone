@@ -10,8 +10,8 @@ function UserDash() {
         <div>
           {user ? (
             <div>
-              <Link to="">Start Game</Link>
-              <Link to="">Add Friends</Link>
+              <Link to="/issue">Initiate Game</Link>
+              <Link to="/friends">Add Friends</Link>
             </div>
           ) : null}
         </div>

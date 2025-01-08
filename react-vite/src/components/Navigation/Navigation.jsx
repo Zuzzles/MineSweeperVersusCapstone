@@ -8,7 +8,9 @@ function Navigation() {
       <li>
         <NavLink to="/">Home</NavLink>
       </li>
-
+      <li>
+        <NavLink to="/challenges">Challenges</NavLink>
+      </li>
       <li>
         <ProfileButton />
       </li>
