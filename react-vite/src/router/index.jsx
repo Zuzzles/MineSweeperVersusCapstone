@@ -1,6 +1,7 @@
 import { createBrowserRouter } from 'react-router-dom';
 import LoginFormPage from '../components/LoginFormPage';
 import SignupFormPage from '../components/SignupFormPage';
+import UserDash from '../components/UserDash';
 import Layout from './Layout';
 
 export const router = createBrowserRouter([
@@ -9,7 +10,7 @@ export const router = createBrowserRouter([
     children: [
       {
         path: "/",
-        element: <></>,
+        element: <UserDash />,
       },
       {
         path: "login",
@@ -19,6 +20,19 @@ export const router = createBrowserRouter([
         path: "signup",
         element: <SignupFormPage />,
       },
+      {
+        path: "/friends",
+        element: <></>
+      },
+      {
+        path: "/issue"
+      },
+      {
+        path: "/challenges"
+      },
+      {
+        path: "/game/:id"
+      }
     ],
   },
 ]);
