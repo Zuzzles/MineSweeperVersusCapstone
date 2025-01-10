@@ -51,6 +51,9 @@ function ProfileButton() {
               <li>{user.username}</li>
               <li>{user.email}</li>
               <div>
+                <li><NavLink onClick={closeMenu} to="/user">Edit User</NavLink></li>
+              </div>
+              <div>
                 <li><NavLink onClick={closeMenu} to="/issue">Initiate Game</NavLink></li>
                 <li><NavLink onClick={closeMenu} to="/friends">Add Friends</NavLink></li>
               </div>

@@ -4,7 +4,8 @@ import SignupFormPage from '../components/SignupFormPage';
 import UserDash from '../components/UserDash';
 import FriendsPage from '../components/FriendsPage/FriendsPage';
 import IssuePage from '../components/IssueChallengePage';
-import ChallengesPage from '../components/ChallengesPage/ChallengesPage';
+import UserPage from '../components/UserPage';
+import WaitingRoom from '../components/WaitingRoom';
 import GamePage from '../components/GamePage/GamePage';
 import Layout from './Layout';
 
@@ -33,11 +34,15 @@ export const router = createBrowserRouter([
         element: <IssuePage />
       },
       {
-        path: "/challenges",
-        element: <ChallengesPage />
+        path: "/user",
+        element: <UserPage />
       },
       {
-        path: "/game/:id",
+        path: "/waiting",
+        element: <WaitingRoom />
+      },
+      {
+        path: "/game",
         element: <GamePage />
       }
     ],
