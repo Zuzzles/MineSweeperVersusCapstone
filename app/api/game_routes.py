@@ -39,6 +39,7 @@ class MinesweeperBoard:
 # Flattens board tiles for transfer   
 def flatten_board(board_arr):
   return [tile for x_list in board_arr for tile in x_list]
+
       
 # Routes begin here
 @game_routes.route('/init')
@@ -92,7 +93,35 @@ def game_init():
     }
  
   except Exception as e:
-    print(e)
     return {'error': str(e)}, 500
   
+# Get current game
+@game_routes.route('/get/<int:id>')
+def get_game(id):
+  """
+  Returns current game
+  """
+  
+  try:
+    game_info = db.session.query(
+      Game,
+      GameData,
+      GameBoardTile
+    ).join(GameData, GameData.id == Game.id).join(
+      GameBoardTile, GameBoardTile.game_data_id == GameData.id
+    ).filter(Game.id == id).all()
+    
+    game_return = {
+      'game': {
+        'id': game_info[0][0].id,
+        'status': game_info[0][0].status
+      },
+      'game_tiles': [tile[2].to_dict() for tile in game_info]
+    }
+
+    return game_return
+
+  except Exception as e:
+    return {'error': str(e)}, 500
+
 # Update board

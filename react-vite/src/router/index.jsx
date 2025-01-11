@@ -42,7 +42,7 @@ export const router = createBrowserRouter([
         element: <WaitingRoom />
       },
       {
-        path: "/game",
+        path: "/game/:id",
         element: <GamePage />
       }
     ],

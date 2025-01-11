@@ -1,3 +1,13 @@
 .grid {
   display: grid;
+  justify-content: center;
+}
+
+.gridCell {
+  border: 1px solid;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 28px;
+  height: 28px;
 }
