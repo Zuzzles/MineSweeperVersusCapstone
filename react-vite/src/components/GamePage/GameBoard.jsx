@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 // import { getGame } from "../../redux/game";
 import './GamePage.css'
 
-function GameBoard({ game_data, id }) {
+function GameBoard({ game_data }) {  // add id
   // const dispatch = useDispatch();
   // const { id } = useParams();
   const [localGameData, setLocalGame] = useState([]);

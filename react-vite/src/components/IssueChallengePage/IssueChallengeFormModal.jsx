@@ -1,7 +1,7 @@
-import { useModal } from "../../context/Modal";
+// import { useModal } from "../../context/Modal";
 
 function IssueFormModal() {
-  const { closeModal } = useModal();
+  // const { closeModal } = useModal();
 
   const handleSubmit = async (e) => {
     e.preventDefault();

@@ -8,11 +8,14 @@ function Navigation() {
       <li>
         <NavLink to="/">Home</NavLink>
       </li>
-      {true ? (
+      <li>
+        <NavLink to="/game">Active Game</NavLink>
+      </li>
+      {/* {true ? (
         <li>
           <NavLink to="/game">Active Game</NavLink>
         </li>
-      ): null}
+      ): null} */}
       <li>
         <ProfileButton />
       </li>

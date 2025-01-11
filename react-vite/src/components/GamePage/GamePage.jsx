@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect} from "react";  // useState
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getGame } from "../../redux/game";
@@ -12,22 +12,16 @@ function GamePage() {
   
   useEffect(() => {
     dispatch(getGame(id));
-  }, [dispatch])
+  }, [dispatch, id])
 
-  const tile_cases = (tile, index) => {
-    if (true) {
-      switch (tile.value) {
-        case 0: 
-          return (<div className = '0Cell'></div>)
-        case 11:
-          return (<div className = 'MCell'>M</div>)
-        default:
-          return (<div className = {`${tile.value}Cell`}>{tile.value}</div>)
-      }
-
-    }
-    else {
-      return <div className = 'hidden'>place</div>
+  const tile_cases = (tile) => {
+    switch (tile.value) {
+      case 0: 
+        return (<div className = '0Cell'></div>)
+      case 11:
+        return (<div className = 'MCell'>M</div>)
+      default:
+        return (<div className = {`${tile.value}Cell`}>{tile.value}</div>)
     }
   }
 
