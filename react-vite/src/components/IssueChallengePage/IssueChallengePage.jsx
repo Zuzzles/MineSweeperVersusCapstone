@@ -4,7 +4,7 @@ import IssueFormModal from "./IssueChallengeFormModal";
 function IssuePage() {
   return (
     <div>
-      <div className="friends-and-requests">
+      <div className="challenge-requests">
         <h2>Choose Opponent</h2>
         <ul>
           Placeholder list

@@ -8,7 +8,7 @@ const store = configureStore({
   reducer: {
     session: sessionReducer,
     game: gameReducer,
-    friend: friendReducer
+    friends: friendReducer
   },
   middleware: (getDefaultMiddleware) => {
     const middlewares = getDefaultMiddleware();
