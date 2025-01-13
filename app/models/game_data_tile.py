@@ -25,6 +25,7 @@ class GameBoardTile(db.Model):
     
   def to_dict(self):
     return {
+      'id': self.id,
       'value': self.value,
       'flag_color': self.flag_color,
       'seen': self.seen,

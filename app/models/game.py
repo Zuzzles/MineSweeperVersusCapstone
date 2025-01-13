@@ -11,4 +11,11 @@ class Game(db.Model):
   opponent_id = db.Column(db.Integer, nullable=False)
   host_color = db.Column(db.String, nullable=False)
   opponent_color = db.Column(db.String, nullable=False)
-  status = db.Column(db.Integer, nullable=False) # 0 = initiated, 1 = accepted, 2 = current
+
+  def to_dict(self):
+    return {
+      'id': self.id,
+      'host_color': self.host_color,
+      'opponent_color': self.opponent_color,
+      'status': self.status
+    }

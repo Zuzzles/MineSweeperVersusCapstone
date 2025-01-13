@@ -10,11 +10,17 @@ function IssueFormModal() {
     // navigate to
   }
 
+  // Colors:
+  //    #4D9DE0 Celestial blue
+  //    #E15554 Indian red
+  //    #E1BC29 Saffron
+  //    #3BB273 Jade
+  //    #7768AE Royal purple
+
   return (
     <div>
       <h2>Issue Challenge to /Username/?</h2>
       <form onSubmit={handleSubmit}>
-        <textarea placeholder='Enter Message...' rows="5"/>
         <label>
         Choose Color
         <input type="radio"/>
@@ -23,7 +29,7 @@ function IssueFormModal() {
         <input type="radio"/>
         <input type="radio"/>
         </label>
-        <button type="submit">Submit</button>
+        <button type="submit">Challenge</button>
       </form>
     </div>
   )

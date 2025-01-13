@@ -45,15 +45,15 @@ def flatten_board(board_arr):
 @game_routes.route('/init')
 def game_init():
   """
-  Initializes Game
+  Initializes Game returns full info to opponent
   """
 
   try:
     game = Game(
       host_id = 1,
       opponent_id = 2,
-      host_color = '#F7EE7F',
-      opponent_color = '#6874E8',
+      host_color = '#E15554',
+      opponent_color = '#4D9DE0',
       status = 0
     )
     game_data = GameData(
@@ -66,7 +66,7 @@ def game_init():
     db.session.add(game_data)
     db.session.commit()
   
-    game_board = MinesweeperBoard([12, 10], 11)  #[x, y], number_of_mines
+    game_board = MinesweeperBoard([12, 10], 15)  #[x, y], number_of_mines
 
     game_data_tiles = [[GameBoardTile(
       game_data_id = game_data.id,
@@ -85,21 +85,19 @@ def game_init():
     db.session.commit()
 
     return {
-      'game': {
-        'id': game.id,
-        'status': game.status
-      },
+      'game': game.to_dict,
+      'game_data': game_data.to_dict_opponent(),
       'game_tiles': [tile.to_dict() for tile in game_data_tiles]
     }
  
   except Exception as e:
     return {'error': str(e)}, 500
   
-# Get current game
+# Get current game routes
 @game_routes.route('/get/<int:id>')
 def get_game(id):
   """
-  Returns current game
+  Returns all game data by id
   """
   
   try:
@@ -110,18 +108,34 @@ def get_game(id):
     ).join(GameData, GameData.id == Game.id).join(
       GameBoardTile, GameBoardTile.game_data_id == GameData.id
     ).filter(Game.id == id).all()
+
     
-    game_return = {
-      'game': {
-        'id': game_info[0][0].id,
-        'status': game_info[0][0].status
-      },
+    return {
+      'game': game_info[0][1].to_dict(),
       'game_tiles': [tile[2].to_dict() for tile in game_info]
     }
 
-    return game_return
-
   except Exception as e:
     return {'error': str(e)}, 500
+  
+@game_routes.route('/get_data/<int:id>')
+def get_game_data(id):
+  """
+  Returns changing game data by id
+  """
 
-# Update board
+
+# Update board routes
+# @game_routes.route('/update/<int:id>')
+# def update_game(id):
+#   """
+#   Update game data
+#   """
+
+#   try:
+#     game_info = db.session.query(
+#       GameData,
+#       GameBoardTile
+#     ).join(
+#       GameBoardTile, GameBoardTile.game_data_id
+#     )

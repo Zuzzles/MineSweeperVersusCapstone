@@ -14,6 +14,13 @@ def users():
     users = User.query.all()
     return {'users': [user.to_dict() for user in users]}
 
+@user_routes.route('/friends')
+@login_required
+def user_friends():
+    """
+    Get users friend list
+    """
+
 
 @user_routes.route('/<int:id>')
 @login_required

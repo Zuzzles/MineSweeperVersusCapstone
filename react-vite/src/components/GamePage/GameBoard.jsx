@@ -8,14 +8,14 @@ function GameBoard({ game_data }) {  // add id
   // const dispatch = useDispatch();
   // const { id } = useParams();
   const [localGameData, setLocalGame] = useState([]);
-  const [isLoaded, setIsLoaded] = useState(false);
+  const [isTilesLoaded, setIsTilesLoaded] = useState(false);
 
   useEffect(() => {
-    if (game_data?.length > 0 && !isLoaded) {
+    if (game_data?.length > 0 && !isTilesLoaded) {
       setLocalGame(game_data);
-      setIsLoaded(true);
+      setIsTilesLoaded(true);
     }
-  }, [localGameData, game_data, setLocalGame, setIsLoaded, isLoaded])
+  }, [localGameData, game_data, setLocalGame, setIsTilesLoaded, isTilesLoaded])
 
   const tile_cases = (tile, i) => {
     if (tile.seen) {

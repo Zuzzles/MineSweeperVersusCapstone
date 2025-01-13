@@ -26,19 +26,32 @@ function GamePage() {
   }
 
   return(
-   <div>
-      <div className='grid'>
-        {game_data?.map((tile, index) => (
-          <div 
-            key={index} 
-            className='gridCell' 
-            style={{'gridColumn':`${tile.x_axis + 1}`, 'gridRow': `${tile.y_axis + 1}`}}
-          >{tile_cases(tile)}</div>
-        ))}
+    <div>
+      <div>
+        <h3>Lives</h3>
+        <p>Lose these when you place a wrong flag</p>
+        <div>L  L  L</div>
       </div>
-      <div>Spacer</div>
-      <GameBoard game_data={game_data} id={id} />
-   </div> 
+      <div>
+        <div>
+          User Score
+        </div>
+        <div className='grid'>
+          {game_data?.map((tile, index) => (
+            <div 
+              key={index} 
+              className='gridCell' 
+              style={{'gridColumn':`${tile.x_axis + 1}`, 'gridRow': `${tile.y_axis + 1}`}}
+            >{tile_cases(tile)}</div>
+          ))}
+        </div>
+        <div>Spacer</div>
+        <GameBoard game_data={game_data} id={id} />
+        <div>
+          Other Score
+        </div>
+      </div>
+    </div> 
   )
 }
 

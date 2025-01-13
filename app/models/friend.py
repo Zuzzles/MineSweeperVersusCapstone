@@ -9,5 +9,4 @@ class Friend(db.Model):
   id = db.Column(db.Integer, primary_key=True)
   user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
   friend_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-  message = db.Column(db.Text)
   accepted = db.Column(db.Boolean, nullable=False)

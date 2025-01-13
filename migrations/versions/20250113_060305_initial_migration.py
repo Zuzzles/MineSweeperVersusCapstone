@@ -1,8 +1,8 @@
-"""init_migrations
+"""initial migration
 
-Revision ID: 386757b96e4c
+Revision ID: aaef388e4fd6
 Revises: 
-Create Date: 2025-01-09 16:04:41.909142
+Create Date: 2025-01-13 06:03:05.011969
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = '386757b96e4c'
+revision = 'aaef388e4fd6'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -31,8 +31,11 @@ def upgrade():
     op.create_table('game_data',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('host_score', sa.Integer(), nullable=False),
+    sa.Column('host_lives', sa.Integer(), nullable=False),
     sa.Column('opponent_score', sa.Integer(), nullable=False),
+    sa.Column('opponent_lives', sa.Integer(), nullable=False),
     sa.Column('timer', sa.Integer(), nullable=False),
+    sa.Column('status', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('games',
@@ -41,13 +44,14 @@ def upgrade():
     sa.Column('opponent_id', sa.Integer(), nullable=False),
     sa.Column('host_color', sa.String(), nullable=False),
     sa.Column('opponent_color', sa.String(), nullable=False),
-    sa.Column('status', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=40), nullable=False),
     sa.Column('email', sa.String(length=255), nullable=False),
+    sa.Column('wins', sa.Integer(), nullable=False),
+    sa.Column('losses', sa.Integer(), nullable=False),
     sa.Column('hashed_password', sa.String(length=255), nullable=False),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email'),
