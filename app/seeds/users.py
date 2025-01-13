@@ -12,11 +12,17 @@ def seed_users():
         username='marnie', email='marnie@aa.io', wins=0, losses=0, password='password')
     bobbie = User(
         username='bobbie', email='bobbie@aa.io', wins=0, losses=0, password='password')
+    Smeagol = User(
+        username='Smeagol', email='smeg@aa.io', wins=0, losses=0, password='password')
+    hoblin = User(
+        username='hoblin', email='hob@aa.io', wins=0, losses=0, password='password')
 
     db.session.add(demo)
     db.session.add(demo_2)
     db.session.add(marnie)
     db.session.add(bobbie)
+    db.session.add(Smeagol)
+    db.session.add(hoblin)
     db.session.commit()
 
 
