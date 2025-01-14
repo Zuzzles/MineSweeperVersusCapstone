@@ -9,7 +9,7 @@ function UserDash() {
     <>
       {loading ? (<p>Loading...</p>) : (
         <div>
-          {user ? (
+          {user?.id ? (
             <div>
               <Link to="/issue">Initiate Game</Link>
               <Link to="/friends">Add Friends</Link>

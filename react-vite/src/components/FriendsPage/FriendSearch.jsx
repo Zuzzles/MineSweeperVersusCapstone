@@ -9,6 +9,8 @@ function FriendSearch({ users, details, requested }) {
 
   // TODO: get this working on refresh
   // TODO: set up route for send request
+  // TODO: CSS styling
+  // TODO: get search working
 
 
   const handleSearch = async (e) => {

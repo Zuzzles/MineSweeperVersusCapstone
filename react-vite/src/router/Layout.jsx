@@ -17,7 +17,7 @@ export default function Layout() {
   return (
     <div>
       <ModalProvider>
-        {user ? (<Navigation />) : (<LoginPage />)}
+        {!user || user?.errors ? (<LoginPage />) : (<Navigation />)}
         {isLoaded && <Outlet />}
         <Modal />
       </ModalProvider>

@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";  // useState
+import { useEffect } from "react";  // useState
 import { useDispatch, useSelector } from "react-redux";
 import { getUsers, getFriendDetails, getRequestedFriends } from "../../redux/friend";
 import FriendSearch from "./FriendSearch";
@@ -9,6 +9,7 @@ function FriendsPage() {
 
   // TODO: set up routes for accept and decline request
   // TODO: set up route for remove friend
+  // TODO: css styling
 
   useEffect(() => {
     dispatch(getFriendDetails());

@@ -81,7 +81,6 @@ function GameBoard({ game_data }) {  // add id
       setLocalGame(tempGameData);
     }
   }
-  
 
   return(
    <div>
