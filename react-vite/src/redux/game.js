@@ -24,7 +24,7 @@ export const getGame = createAsyncThunk(
   "game/get",
   async (id, { rejectWithValue }) => {
     try {
-      const res = await fetch(`/api/game/get/${id}/0`);
+      const res = await fetch(`/api/game/get/${id}`);
       const data = await res.json();
       return data;
     } catch (error) {

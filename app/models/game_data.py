@@ -21,6 +21,7 @@ class GameData(db.Model):
     return {
       'id': self.id,
       'host_score': self.host_score,
+      'opponent_score': self.opponent_score,
       'host_lives': self.host_lives,
       'timer': self.timer,
       'status': self.status
@@ -29,6 +30,7 @@ class GameData(db.Model):
   def to_dict_opponent(self):
     return {
       'id': self.id,
+      'host_score': self.host_score,
       'opponent_score': self.opponent_score,
       'opponent_lives': self.opponent_lives,
       'timer': self.timer,

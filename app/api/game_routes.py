@@ -1,6 +1,7 @@
 from flask import Blueprint, jsonify
-from flask_login import login_required
+from flask_login import current_user, login_required
 from app.models import Game, GameData, GameBoardTile, db
+from sqlalchemy import or_
 import random
 import math
 
@@ -96,29 +97,62 @@ def game_init():
     return {'error': str(e)}, 500
   
 # Get current game routes
+@game_routes.route('/active')
+def get_active():
+  """
+  Returns game based on user ID
+  """
+  if current_user.is_authenticated:
+    try:
+      active_game = Game.query.filter(
+        or_(current_user.id == Game.host_id, current_user.id == Game.opponent_id)
+      ).all()
+      
+      return {'game': [game.to_dict() for game in active_game]}
+
+    except Exception as e:
+      return {'error': str(e)}, 500
+  
+  else:
+    return {'error': 'Unauthorized'}, 401
+
 @game_routes.route('/get/<int:id>')
 def get_game(id):
   """
-  Returns all game data by id
+  Returns all game data by game id
   """
+
+  # TODO: set route for getting by user id
+  # TODO: set route for getting game data by game id
+
+  if current_user.is_authenticated:
+    try:
+      game_info = db.session.query(
+        Game,
+        GameData,
+        GameBoardTile
+      ).join(GameData, GameData.id == Game.id).join(
+        GameBoardTile, GameBoardTile.game_data_id == GameData.id
+      ).filter(Game.id == id).all()
+
+      if current_user.id == game_info[0][0].host_id:
+        return {
+          'game': game_info[0][1].to_dict_host(),
+          'game_tiles': [tile[2].to_dict() for tile in game_info]
+        }
+      elif current_user.id == game_info[0][0].opponent_id:
+        return {
+          'game': game_info[0][1].to_dict_opponent(),
+          'game_tiles': [tile[2].to_dict() for tile in game_info]
+        }
+      else:
+        return {'error': 'Unauthorized'}, 401
+
+    except Exception as e:
+      return {'error': str(e)}, 500
   
-  try:
-    game_info = db.session.query(
-      Game,
-      GameData,
-      GameBoardTile
-    ).join(GameData, GameData.id == Game.id).join(
-      GameBoardTile, GameBoardTile.game_data_id == GameData.id
-    ).filter(Game.id == id).all()
-
-    
-    return {
-      'game': game_info[0][1].to_dict(),
-      'game_tiles': [tile[2].to_dict() for tile in game_info]
-    }
-
-  except Exception as e:
-    return {'error': str(e)}, 500
+  else:
+    return {'error': 'Unauthorized'}, 401
   
 @game_routes.route('/get_data/<int:id>')
 def get_game_data(id):
