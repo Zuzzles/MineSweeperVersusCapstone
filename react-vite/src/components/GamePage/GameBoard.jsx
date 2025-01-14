@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 // import { useParams } from "react-router-dom";
 // import { getGame } from "../../redux/game";
 import './GamePage.css'
@@ -45,8 +45,14 @@ function GameBoard({ game_data }) {  // add id
 
   const tileClick = (tile, index) => {
     if (tile.value === 11) {
-      // TODO: needs to update status to game data and add conditions
-      console.log("loss")
+      setLocalGame(localGameData.map(currTile => ({
+        id: currTile.id,
+        flag_color: currTile.flag_color,
+        seen: true,
+        value: currTile.value,
+        x_axis: currTile.x_axis,
+        y_axis: currTile.y_axis
+      })))
     }
     else {
       const seenList = [[tile, index]]
@@ -56,7 +62,8 @@ function GameBoard({ game_data }) {  // add id
         const currTile = currData[0];
         const currIndex = currData[1];
         tempGameData[currIndex] = {
-          flag_color: currTile.flag,
+          id: currTile.id,
+          flag_color: currTile.flag_color,
           seen: true,
           value: currTile.value,
           x_axis: currTile.x_axis,

@@ -8,7 +8,7 @@ import './GamePage.css'
 function GamePage() {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const game_data = useSelector((store) => store.game.data)
+  const { game, data } = useSelector((store) => store.game)
   
   useEffect(() => {
     dispatch(getGame(id));
@@ -25,19 +25,32 @@ function GamePage() {
     }
   }
 
+  const life_cases = (lives) => {
+    switch (lives) {
+      case 3:
+        return (<div>L L L</div>)
+      case 2:
+        return (<div>X L L</div>)
+      case 1:
+        return (<div>X X L</div>)
+      case 0:
+        return (<div>X X X</div>)
+    }
+  }
+
   return(
     <div>
       <div>
         <h3>Lives</h3>
         <p>Lose these when you place a wrong flag</p>
-        <div>L  L  L</div>
+        {life_cases(game?.lives)}
       </div>
       <div>
         <div>
           User Score
         </div>
         <div className='grid'>
-          {game_data?.map((tile, index) => (
+          {data?.map((tile, index) => (
             <div 
               key={index} 
               className='gridCell' 
@@ -46,7 +59,7 @@ function GamePage() {
           ))}
         </div>
         <div>Spacer</div>
-        <GameBoard game_data={game_data} id={id} />
+        <GameBoard game_data={data} id={id} />
         <div>
           Other Score
         </div>

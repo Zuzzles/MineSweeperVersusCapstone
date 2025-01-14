@@ -58,9 +58,9 @@ def game_init():
     )
     game_data = GameData(
       host_score = 0,
-      host_lives = 0,
+      host_lives = 3,
       opponent_score = 0,
-      opponent_lives = 0,
+      opponent_lives = 3,
       status = 0,
       timer = 0
     )
