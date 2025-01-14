@@ -1,4 +1,4 @@
-import { useEffect} from "react";  // useState
+import { useEffect } from "react";  // useState
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
 import { getGame } from "../../redux/game";

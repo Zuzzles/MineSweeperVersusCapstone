@@ -106,9 +106,9 @@ def get_active():
     try:
       active_game = Game.query.filter(
         or_(current_user.id == Game.host_id, current_user.id == Game.opponent_id)
-      ).all()
+      ).first()
       
-      return {'game': [game.to_dict() for game in active_game]}
+      return {'game': active_game.to_dict()}
 
     except Exception as e:
       return {'error': str(e)}, 500
@@ -121,9 +121,6 @@ def get_game(id):
   """
   Returns all game data by game id
   """
-
-  # TODO: set route for getting by user id
-  # TODO: set route for getting game data by game id
 
   if current_user.is_authenticated:
     try:
