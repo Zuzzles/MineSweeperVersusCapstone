@@ -16,6 +16,5 @@ class Game(db.Model):
     return {
       'id': self.id,
       'host_color': self.host_color,
-      'opponent_color': self.opponent_color,
-      'status': self.status
+      'opponent_color': self.opponent_color
     }

@@ -17,11 +17,20 @@ class GameData(db.Model):
   status = db.Column(db.Integer, nullable=False)
     # 0 = accepted, 1 = current, 2 = host wins, 3 = opponent wins
 
-  def to_dict(self):
+  def to_dict_host(self):
     return {
       'id': self.id,
       'host_score': self.host_score,
       'host_lives': self.host_lives,
+      'timer': self.timer,
+      'status': self.status
+    }
+  
+  def to_dict_opponent(self):
+    return {
+      'id': self.id,
+      'opponent_score': self.opponent_score,
+      'opponent_lives': self.opponent_lives,
       'timer': self.timer,
       'status': self.status
     }

@@ -53,12 +53,14 @@ def game_init():
       host_id = 1,
       opponent_id = 2,
       host_color = '#E15554',
-      opponent_color = '#4D9DE0',
-      status = 0
+      opponent_color = '#4D9DE0'
     )
     game_data = GameData(
       host_score = 0,
+      host_lives = 0,
       opponent_score = 0,
+      opponent_lives = 0,
+      status = 0,
       timer = 0
     )
 
@@ -85,7 +87,7 @@ def game_init():
     db.session.commit()
 
     return {
-      'game': game.to_dict,
+      'game': game.to_dict(),
       'game_data': game_data.to_dict_opponent(),
       'game_tiles': [tile.to_dict() for tile in game_data_tiles]
     }
