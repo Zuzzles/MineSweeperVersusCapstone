@@ -15,7 +15,7 @@ class GameData(db.Model):
   opponent_lives = db.Column(db.Integer, nullable=False)
   timer = db.Column(db.Integer, nullable=False)
   status = db.Column(db.Integer, nullable=False)
-    # 0 = accepted, 1 = current, 2 = host wins, 3 = opponent wins
+    # 0 = current, 1 = host wins, 2 = opponent wins, 3 = cancelled
 
   def to_dict_host(self):
     return {

@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux"
 import { NavLink, useNavigate } from "react-router-dom";
-import { getActive } from "../../redux/game";
+import { getActive, getRequestTo, getRequestsFor } from "../../redux/game";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
 
@@ -9,10 +9,12 @@ function Navigation() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { user, loading } = useSelector(store => store.session)
-  const { init } = useSelector(store => store.game)
+  const { requestTo, requestsFor, init } = useSelector(store => store.game)
 
   useEffect(() => {
     dispatch(getActive());
+    dispatch(getRequestTo());
+    dispatch(getRequestsFor());
   }, [dispatch])
   
   if (!loading && !user ) {
@@ -28,7 +30,17 @@ function Navigation() {
         <li>
           <NavLink to={`/game/${init.id}`}>Active Game</NavLink>
         </li>
-      ): null}
+      ) : null}
+      {!init && requestTo ? (
+        <li>
+          <NavLink to={"/waiting"}>Waiting Room</NavLink>
+        </li>
+      ) : null}
+      {!init && !requestTo && requestsFor.length !== 0 ? (
+        <li>
+          <NavLink to={''}>Game Requests</NavLink>
+        </li>
+      ) : null}
       <li>
         <ProfileButton />
       </li>

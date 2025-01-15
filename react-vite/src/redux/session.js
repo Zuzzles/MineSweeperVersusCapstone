@@ -62,7 +62,6 @@ export const thunkSignup = createAsyncThunk(
         body: JSON.stringify({ username, email, password }),
       });
       const data = await res.json();
-      console.log(data);
       if (!res.ok) {
         return rejectWithValue(data);
       }

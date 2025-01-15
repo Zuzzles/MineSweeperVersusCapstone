@@ -1,7 +1,9 @@
-from flask import Blueprint, jsonify
+from flask import Blueprint, request
 from flask_login import current_user, login_required
-from app.models import Game, GameData, GameBoardTile, db
-from sqlalchemy import or_
+from flask_wtf.csrf import validate_csrf
+from app.models import GameRequest, Game, GameData, GameBoardTile, db
+from app.forms import GameRequestForm
+from sqlalchemy import or_, and_
 import random
 import math
 
@@ -43,6 +45,106 @@ def flatten_board(board_arr):
 
       
 # Routes begin here
+@game_routes.route('/request/issue', methods = ['POST'])
+def game_request_issue():
+  """
+  Create and issue friend request with opponent id
+  """
+  if current_user.is_authenticated:
+    try:
+      form = GameRequestForm()
+      form['csrf_token'].data = request.cookies['csrf_token']
+      print("!!!", form.data)
+      game_data = db.session.query(
+        Game,
+        GameData
+      ).filter(and_(
+        Game.opponent_id == form.data['opponentID'], GameData.status == 0
+      )).first()
+      if game_data:
+        return {'error': 'You have an active game, either play or cancel game.'}, 401
+      if GameRequest.query.filter(and_(
+        GameRequest.host_id == current_user.id,
+        GameRequest.accepted == False,
+        GameRequest.declined == False
+      )).first():
+        return {'error': 'You have already requested a game, cancel your request to issue a new one.'}, 401
+      if form.validate_on_submit():
+        game_request = GameRequest(
+          host_id = current_user.id,
+          opponent_id = form.data['opponentID'],
+          host_color = form.data['hostColor'],
+          accepted = False,
+          declined = False
+        )
+        db.session.add(game_request)
+        db.session.commit()
+        return {'request': game_request.to_dict()}
+      return {'error': form.errors}, 401
+    except Exception as e:
+      return {'error': str(e)}, 500
+  
+  else:
+    return {'error': 'Unauthorized'}, 401
+
+@game_routes.route('/request/get')
+def get_request():
+  """
+  Returns requests for games
+  """
+  if current_user.is_authenticated:
+    try:
+      requests = GameRequest.query.filter(GameRequest.opponent_id == current_user.id).all()
+      
+      return {'requests': [request.to_dict() for request in requests]}
+
+    except Exception as e:
+      return {'error': str(e)}, 500
+    
+  else:
+    return {'error': 'Unauthorized'}, 401  
+  
+@game_routes.route('/request/self')
+def get_self_requests():
+  """
+  Returns your request
+  """
+  if current_user.is_authenticated:
+    try:
+      request = GameRequest.query.filter(GameRequest.host_id == current_user.id).first()
+
+      return {'request': request.to_dict()}
+    
+    except Exception as e:
+      return {'error': str(e)}, 500
+    
+  else:
+    return {'error': 'Unauthorized'}, 401  
+  
+@game_routes.route('/request/delete/<int:id>', methods=['DELETE'])
+def delete_request(id):
+  """
+  deletes request
+  """
+  try:
+    csrf_token = request.cookies.get('csrf_token')
+    try:
+      validate_csrf(csrf_token)
+    except:
+      return {'error': 'CSRF token is invalid'}, 400
+
+    game_request = GameRequest.query.get(id)
+    if not game_request:
+      return {'error': 'request not found'}, 404
+    
+    db.session.delete(game_request)
+    db.session.commit()
+
+    return {'message': "Request deleted successfully"}, 200
+  
+  except Exception as e:
+    return {'error': str(e)}, 500
+
 @game_routes.route('/init')
 def game_init():
   """
@@ -95,7 +197,8 @@ def game_init():
  
   except Exception as e:
     return {'error': str(e)}, 500
-  
+
+
 # Get current game routes
 @game_routes.route('/active')
 def get_active():

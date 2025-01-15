@@ -11,4 +11,14 @@ class GameRequest(db.Model):
   opponent_id = db.Column(db.Integer, nullable=False)
   host_color = db.Column(db.String, nullable=False)
   accepted = db.Column(db.Boolean, nullable=False)
-  declined = db.Column(db.Column, nullable=False)
+  declined = db.Column(db.Boolean, nullable=False)
+
+  def to_dict(self):
+    return {
+      'id': self.id,
+      'host_id': self.host_id,
+      'opponent_id': self.opponent_id,
+      'host_color': self.host_color,
+      'accepted': self.accepted,
+      'declined': self.declined
+    }

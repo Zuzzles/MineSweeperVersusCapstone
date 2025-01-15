@@ -29,9 +29,8 @@ function IssuePage() {
         <ul>
           {loading ? (<p>Loading</p>) : (
             <>{details?.list.map((item) => (<OpenModalMenuItem 
-              modalComponent={<IssueFormModal />}
+              modalComponent={<IssueFormModal user={item}/>}
               itemText={item.username}
-              user={item}
             /> ))}</>
           )}
         </ul>

@@ -5,10 +5,10 @@ from sqlalchemy.sql import text
 # Adds demo friends, you can add other friends here if you want
 def seed_friends():
     demo_friends = [
-      Friend(user_id=1, friend_id=3, accepted=True),
-      Friend(user_id=3, friend_id=1, accepted=True),
+      Friend(user_id=1, friend_id=2, accepted=True),
+      Friend(user_id=2, friend_id=1, accepted=True),
       Friend(user_id=1, friend_id=4, accepted=False),
-      Friend(user_id=2, friend_id=1, accepted=False)
+      Friend(user_id=3, friend_id=1, accepted=False)
     ]
 
     db.session.add_all(demo_friends)
