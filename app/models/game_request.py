@@ -22,3 +22,4 @@ class GameRequest(db.Model):
       'accepted': self.accepted,
       'declined': self.declined
     }
+  

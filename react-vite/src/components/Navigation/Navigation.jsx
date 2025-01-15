@@ -36,9 +36,9 @@ function Navigation() {
           <NavLink to={"/waiting"}>Waiting Room</NavLink>
         </li>
       ) : null}
-      {!init && !requestTo && requestsFor.length !== 0 ? (
+      {!init && !requestTo && requestsFor?.length !== 0 ? (
         <li>
-          <NavLink to={''}>Game Requests</NavLink>
+          <NavLink to={"/challenges"}>Game Requests</NavLink>
         </li>
       ) : null}
       <li>

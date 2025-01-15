@@ -1,7 +1,7 @@
 from flask import Blueprint, request
 from flask_login import current_user, login_required
 from flask_wtf.csrf import validate_csrf
-from app.models import GameRequest, Game, GameData, GameBoardTile, db
+from app.models import GameRequest, Game, GameData, GameBoardTile, User, db
 from app.forms import GameRequestForm
 from sqlalchemy import or_, and_
 import random
@@ -94,9 +94,15 @@ def get_request():
   """
   if current_user.is_authenticated:
     try:
-      requests = GameRequest.query.filter(GameRequest.opponent_id == current_user.id).all()
+      requests = db.session.query(GameRequest, User).join(
+        GameRequest, GameRequest.host_id == User.id
+      ).filter(
+        GameRequest.opponent_id == current_user.id
+      ).all()
+
+      request_dicts = [request[0].to_dict() for request in requests]
       
-      return {'requests': [request.to_dict() for request in requests]}
+      return {'requests': [{**request, "host_name": requests[index][1].username} for index, request in enumerate(request_dicts)]}
 
     except Exception as e:
       return {'error': str(e)}, 500

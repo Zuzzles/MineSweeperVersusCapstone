@@ -14,10 +14,10 @@ import { useModal } from "../../context/Modal";
 //TODO: CSS styling
 //TODO: fix radio input colors
 
-function IssueFormModal({ user }) {
+function ChallengeAcceptModal({ request }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [hostColor, setHostColor] = useState("");
+  const [opponentColor, setOpponentColor] = useState("");
   const [errors, setErrors] = useState();
   const { closeModal } = useModal(); 
   const colors = ['#4D9DE0', '#E15554', '#E1BC29', '#3BB273', '#7768AE']
@@ -26,42 +26,44 @@ function IssueFormModal({ user }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    const opponentID = user.id
+    // const opponentID = user.id
 
-    const serverResponse = await dispatch(
-      createRequest({
-        opponentID,
-        hostColor
-      })
-    )
-    if (serverResponse.type === "session/requestIssue/rejected") {
-      setErrors(serverResponse);
-    } else {
-      closeModal();
-      navigate('/waiting');
-    }
+    // const serverResponse = await dispatch(
+    //   createRequest({
+    //     opponentID,
+    //     hostColor
+    //   })
+    // )
+    // if (serverResponse.type === "session/login/rejected") {
+    //   setErrors(serverResponse);
+    // } else {
+    //   closeModal();
+    //   navigate('/waiting');
+    // }
   }
 
   return (
     <div>
-      <h2>{`Issue Challenge to ${user?.username}?`}</h2>
+      <h2>{`Accept Challenge from ${request?.host_name}?`}</h2>
       <form onSubmit={handleSubmit}>
         <label>
         Choose Color
         {colors.map((color, i) => (
-          <input key={i} 
+          color === request.host_color ? null : (
+            <input key={i} 
             onChange={(e) => setHostColor(e.target.value)}
             type="radio" 
             value={color} 
             name="colorPick" 
             style={{'accentColor': `${color}`, 'outline': `5px solid ${color}`}}
             required/>
+          )
         ))}
         </label>
-        <button type="submit">Challenge</button>
+        <button type="submit">Accept Challenge</button>
       </form>
     </div>
   )
 }
 
-export default IssueFormModal
+export default ChallengeAcceptModal

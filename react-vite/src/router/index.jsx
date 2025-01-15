@@ -7,6 +7,7 @@ import IssuePage from '../components/IssueChallengePage';
 import UserPage from '../components/UserPage';
 import WaitingRoom from '../components/WaitingRoom';
 import GamePage from '../components/GamePage/GamePage';
+import ChallengeRequests from '../components/ChallengeRequestsPage';
 import Layout from './Layout';
 
 export const router = createBrowserRouter([
@@ -32,6 +33,10 @@ export const router = createBrowserRouter([
       {
         path: "/issue",
         element: <IssuePage />
+      },
+      {
+        path: "/challenges",
+        element: <ChallengeRequests />
       },
       {
         path: "/user",
