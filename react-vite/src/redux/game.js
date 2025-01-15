@@ -69,9 +69,18 @@ export const cancelRequest = createAsyncThunk(
 
 export const createGame = createAsyncThunk(
   "game/initialize",
-  async (_, { rejectWithValue }) => {
+  async ({ hostID, opponentID, hostColor, opponentColor }, { rejectWithValue }) => {
     try {
-      const res = await fetch("/api/game/init");
+      const res = await fetch("/api/game/init", {
+        method: "POST",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          hostID,
+          opponentID,
+          hostColor,
+          opponentColor 
+        })
+      });
       const data = await res.json();
       return data;
     } catch (error) {

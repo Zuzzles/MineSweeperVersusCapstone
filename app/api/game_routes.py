@@ -2,7 +2,7 @@ from flask import Blueprint, request
 from flask_login import current_user, login_required
 from flask_wtf.csrf import validate_csrf
 from app.models import GameRequest, Game, GameData, GameBoardTile, User, db
-from app.forms import GameRequestForm
+from app.forms import GameRequestForm, GameForm
 from sqlalchemy import or_, and_
 import random
 import math
@@ -45,6 +45,7 @@ def flatten_board(board_arr):
 
       
 # Routes begin here
+# request routes
 @game_routes.route('/request/issue', methods = ['POST'])
 def game_request_issue():
   """
@@ -54,7 +55,7 @@ def game_request_issue():
     try:
       form = GameRequestForm()
       form['csrf_token'].data = request.cookies['csrf_token']
-      print("!!!", form.data)
+      # print("!!!", form.data)
       game_data = db.session.query(
         Game,
         GameData
@@ -151,31 +152,38 @@ def delete_request(id):
   except Exception as e:
     return {'error': str(e)}, 500
 
-@game_routes.route('/init')
+
+# game routes
+@game_routes.route('/init', methods = ['POST'])
 def game_init():
   """
   Initializes Game returns full info to opponent
   """
 
   try:
-    game = Game(
-      host_id = 1,
-      opponent_id = 2,
-      host_color = '#E15554',
-      opponent_color = '#4D9DE0'
-    )
-    game_data = GameData(
-      host_score = 0,
-      host_lives = 3,
-      opponent_score = 0,
-      opponent_lives = 3,
-      status = 0,
-      timer = 0
-    )
+    form = GameForm()
+    form['csrf_token'].data = request.cookies['csrf_token']
+    if form.validate_on_submit():
+      game = Game(
+        host_id = form.data['hostID'],
+        opponent_id = form.data['opponentID'],
+        host_color = form.data['hostColor'],
+        opponent_color = form.data['opponentColor']
+      )
+      game_data = GameData(
+        host_score = 0,
+        host_lives = 3,
+        opponent_score = 0,
+        opponent_lives = 3,
+        status = 0,
+        timer = 0
+      )
 
-    db.session.add(game)
-    db.session.add(game_data)
-    db.session.commit()
+      db.session.add(game)
+      db.session.add(game_data)
+      db.session.commit()
+    else:
+      return {'error': form.errors}, 401
   
     game_board = MinesweeperBoard([12, 10], 15)  #[x, y], number_of_mines
 
@@ -204,8 +212,6 @@ def game_init():
   except Exception as e:
     return {'error': str(e)}, 500
 
-
-# Get current game routes
 @game_routes.route('/active')
 def get_active():
   """

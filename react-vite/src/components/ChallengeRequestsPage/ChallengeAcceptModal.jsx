@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createRequest } from "../../redux/game";
+import { createGame } from "../../redux/game";
 import { useModal } from "../../context/Modal";
 
 // Colors:
@@ -17,6 +17,7 @@ import { useModal } from "../../context/Modal";
 function ChallengeAcceptModal({ request }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
+  const { init } = useSelector((store) => store.game);
   const [opponentColor, setOpponentColor] = useState("");
   const [errors, setErrors] = useState();
   const { closeModal } = useModal(); 
@@ -26,20 +27,25 @@ function ChallengeAcceptModal({ request }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // const opponentID = user.id
+    const hostID = request.host_id;
+    const opponentID = request.opponent_id;
+    const hostColor = request.host_color;
 
-    // const serverResponse = await dispatch(
-    //   createRequest({
-    //     opponentID,
-    //     hostColor
-    //   })
-    // )
-    // if (serverResponse.type === "session/login/rejected") {
-    //   setErrors(serverResponse);
-    // } else {
-    //   closeModal();
-    //   navigate('/waiting');
-    // }
+    const serverResponse = await dispatch(
+      createGame({
+        hostID,
+        opponentID,
+        hostColor,
+        opponentColor
+      })
+    );
+
+    if (serverResponse.type === "game/initialize/rejected") {
+      setErrors(serverResponse);
+    } else {
+      closeModal();
+      navigate(`/game/${init?.id}`);
+    }
   }
 
   return (
@@ -51,7 +57,7 @@ function ChallengeAcceptModal({ request }) {
         {colors.map((color, i) => (
           color === request.host_color ? null : (
             <input key={i} 
-            onChange={(e) => setHostColor(e.target.value)}
+            onChange={(e) => setOpponentColor(e.target.value)}
             type="radio" 
             value={color} 
             name="colorPick" 

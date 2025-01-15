@@ -1,6 +1,6 @@
 from flask_wtf import FlaskForm
 from wtforms import StringField, IntegerField
-from wtforms.validators import DataRequired, ValidationError
+from wtforms.validators import DataRequired, Email, ValidationError
 from app.models import User
 
 
@@ -9,7 +9,7 @@ def user_exists(form, _):
     opponent_id = form.data['opponentID']
     user = User.query.filter(User.id == opponent_id).first()
     if not user:
-        raise ValidationError('Email provided not found.')
+        raise ValidationError('User not found.')
 
 
 def color_exists(form, _):
@@ -19,6 +19,8 @@ def color_exists(form, _):
         raise ValidationError('Not a valid hex color.')
 
 
-class GameRequestForm(FlaskForm):
+class GameForm(FlaskForm):
+    hostID = IntegerField('hostID', validators=[DataRequired(), user_exists])
     opponentID = IntegerField('opponentID', validators=[DataRequired(), user_exists])
     hostColor = StringField('hostColor', validators=[DataRequired(), color_exists])
+    opponentColor = StringField('hostColor', validators=[DataRequired(), color_exists])
