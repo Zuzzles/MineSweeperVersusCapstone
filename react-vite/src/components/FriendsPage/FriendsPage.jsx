@@ -27,7 +27,7 @@ function FriendsPage() {
             <h2>Friend Requests</h2>
             <ul>
               {details?.requests.length === 0 ? (<p>No Requests</p>) : (
-                details?.requests.map((request, i) => 
+                details?.requests?.map((request, i) => 
                   <li key={i}>
                     {request.username}
                     <button>Accept</button>

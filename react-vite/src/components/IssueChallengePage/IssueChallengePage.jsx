@@ -28,7 +28,7 @@ function IssuePage() {
         <h2>Choose Opponent</h2>
         <ul>
           {loading ? (<p>Loading</p>) : (
-            <>{details?.list.map((item, i) => (<OpenModalMenuItem 
+            <>{details?.list?.map((item, i) => (<OpenModalMenuItem 
               key={i}
               modalComponent={<IssueFormModal user={item}/>}
               itemText={item.username}
