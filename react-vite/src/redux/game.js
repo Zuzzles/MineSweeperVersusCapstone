@@ -179,8 +179,9 @@ const gameSlice = createSlice({
       })
       .addCase(createGame.fulfilled, (state, action) => {
         state.loading = false;
-        state.game = action.payload.game;
-        state.data = action.payload.game_tiles
+        state.init = action.payload.game;
+        state.game = action.payload.game_data;
+        state.data = action.payload.game_tiles;
       })
       .addCase(getGame.pending, (state) => {
         state.loading = true;

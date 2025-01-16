@@ -265,12 +265,6 @@ def get_game(id):
   
   else:
     return {'error': 'Unauthorized'}, 401
-  
-@game_routes.route('/get_data/<int:id>')
-def get_game_data(id):
-  """
-  Returns changing game data by id
-  """
 
 
 # Update board routes
