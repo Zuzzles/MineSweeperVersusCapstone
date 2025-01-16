@@ -7,7 +7,6 @@ class Friend(db.Model):
     __table_args__ = {'schema': SCHEMA}
 
   id = db.Column(db.Integer, primary_key=True)
-  user_id = db.Column(db.Integer, db.ForeignKey('users.id'), nullable=False)
-  friend_id = db.Column(db.Integer, db.ForeignKey('user.id'), nullable=False)
-  message = db.Column(db.Text)
+  user_id = db.Column(db.Integer, nullable=False)
+  friend_id = db.Column(db.Integer, nullable=False)
   accepted = db.Column(db.Boolean, nullable=False)

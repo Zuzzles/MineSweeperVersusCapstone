@@ -4,8 +4,10 @@ import SignupFormPage from '../components/SignupFormPage';
 import UserDash from '../components/UserDash';
 import FriendsPage from '../components/FriendsPage/FriendsPage';
 import IssuePage from '../components/IssueChallengePage';
-import ChallengesPage from '../components/ChallengesPage/ChallengesPage';
+import UserPage from '../components/UserPage';
+import WaitingRoom from '../components/WaitingRoom';
 import GamePage from '../components/GamePage/GamePage';
+import ChallengeRequests from '../components/ChallengeRequestsPage';
 import Layout from './Layout';
 
 export const router = createBrowserRouter([
@@ -34,7 +36,15 @@ export const router = createBrowserRouter([
       },
       {
         path: "/challenges",
-        element: <ChallengesPage />
+        element: <ChallengeRequests />
+      },
+      {
+        path: "/user",
+        element: <UserPage />
+      },
+      {
+        path: "/waiting",
+        element: <WaitingRoom />
       },
       {
         path: "/game/:id",
