@@ -1,18 +1,18 @@
 import { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+// import { useDispatch, useSelector } from "react-redux";
 // import { useParams } from "react-router-dom";
 // import { getGame } from "../../redux/game";
 // import { name } from "react-icons/fa6"; FaHeart FaBomb 
 import { FaFlag, FaBomb } from "react-icons/fa6";
 import './GamePage.css'
 
-function GameBoard({ game_data, id, setLives, lives }) { 
+function GameBoard({ game_data, setLives, lives }) {  // id,
   // const dispatch = useDispatch();
   // const { id } = useParams();
   const [localGameData, setLocalGame] = useState([]);
   const [isTilesLoaded, setIsTilesLoaded] = useState(false);
   const [markFlag, setMarkFlag] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
+  // const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     if (game_data?.length > 0 && !isTilesLoaded) {

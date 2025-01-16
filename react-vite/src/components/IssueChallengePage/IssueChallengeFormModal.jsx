@@ -18,7 +18,7 @@ function IssueFormModal({ user }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [hostColor, setHostColor] = useState("");
-  const [errors, setErrors] = useState();
+  // const [errors, setErrors] = useState();
   const { closeModal } = useModal(); 
   const colors = ['#4D9DE0', '#E15554', '#E1BC29', '#3BB273', '#7768AE']
 
@@ -35,7 +35,7 @@ function IssueFormModal({ user }) {
       })
     )
     if (serverResponse.type === "session/requestIssue/rejected") {
-      setErrors(serverResponse);
+      // setErrors(serverResponse);
     } else {
       closeModal();
       navigate('/waiting');

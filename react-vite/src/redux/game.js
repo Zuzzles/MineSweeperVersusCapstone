@@ -61,7 +61,7 @@ export const cancelRequest = createAsyncThunk(
         method: "DELETE",
       });
       return;
-    } catch {
+    } catch (error) {
       return rejectWithValue(error.message || "Delete request failed");
     }
   }
@@ -129,7 +129,7 @@ const gameSlice = createSlice({
         state.loading = false;
         state.errors = action.payload;
       })
-      .addCase(createRequest.fulfilled, (state, _) => {
+      .addCase(createRequest.fulfilled, (state) => {
         state.loading = false;
         // state.requestTo = action.payload.request;
       })

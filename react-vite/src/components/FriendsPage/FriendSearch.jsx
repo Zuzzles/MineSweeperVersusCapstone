@@ -1,11 +1,11 @@
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";  // useEffect
 
-function FriendSearch({ users, details, requested }) {
-  const [userSearch, setUserSearch] = useState(users?.filter((user) => !(
-    details?.list.map((item) => item.username).includes(user.username) ||
-    details?.requests.map((item) => item.username).includes(user.username) ||
-    requested?.map((item) => item.username).includes(user.username)
-  )));
+function FriendSearch() {  // { users, details, requested }
+  // const [userSearch, setUserSearch] = useState(users?.filter((user) => !(
+  //   details?.list.map((item) => item.username).includes(user.username) ||
+  //   details?.requests.map((item) => item.username).includes(user.username) ||
+  //   requested?.map((item) => item.username).includes(user.username)
+  // )));
 
   // TODO: get this working on refresh
   // TODO: set up route for send request
@@ -31,13 +31,13 @@ function FriendSearch({ users, details, requested }) {
       <div>
         <h3>Results</h3>
         <ul>
-          {userSearch?.length === 0 ? (<p>No Results</p>) : (
+          {/* {userSearch?.length === 0 ? (<p>No Results</p>) : (
             userSearch?.map((request, i) => 
               <li key={i}>
                 {request.username}
                 <button>Send Request</button>
               </li>)
-          )}
+          )} */}
         </ul>
       </div>
     </div>

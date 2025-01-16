@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { useNavigate, Navigate } from "react-router-dom";
+import { Navigate } from "react-router-dom"; // useNavigate,
 import { getActive, getRequestTo, getRequestsFor } from "../../redux/game";
 import OpenModalButton from "../OpenModalButton";
 import ChallengeAcceptModal from "./ChallengeAcceptModal";
@@ -9,7 +9,7 @@ import ChallengeAcceptModal from "./ChallengeAcceptModal";
 
 function ChallengeRequests() {
   const dispatch = useDispatch();
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const { game, requestTo, requestsFor, loading } = useSelector((store) => store.game)
 
   useEffect( () => {

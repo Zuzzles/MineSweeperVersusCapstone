@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";  // , useState
 import { useDispatch, useSelector } from "react-redux";
 import { getFriendDetails } from "../../redux/friend";
 import { OpenModalMenuItem } from "../Navigation";
@@ -7,7 +7,7 @@ import IssueFormModal from "./IssueChallengeFormModal";
 function IssuePage() {
   const dispatch = useDispatch();
   const { details, loading } = useSelector((store) => store.friends)
-  const [searchResults, setSearchResults] = useState([])
+  // const [searchResults, setSearchResults] = useState([])
 
   // TODO: css styling
   // TODO: get search working
@@ -28,7 +28,8 @@ function IssuePage() {
         <h2>Choose Opponent</h2>
         <ul>
           {loading ? (<p>Loading</p>) : (
-            <>{details?.list.map((item) => (<OpenModalMenuItem 
+            <>{details?.list.map((item, i) => (<OpenModalMenuItem 
+              key={i}
               modalComponent={<IssueFormModal user={item}/>}
               itemText={item.username}
             /> ))}</>
@@ -44,13 +45,13 @@ function IssuePage() {
         <div>
           <h3>Results</h3>
           <ul>
-          {searchResults?.length === 0 ? (<p>No Results</p>) : (
+          {/* {searchResults?.length === 0 ? (<p>No Results</p>) : (
             searchResults?.map((request, i) => 
               <li key={i}>
                 {request.username}
                 <button>Send Request</button>
               </li>)
-          )}
+          )} */}
           </ul>
         </div>
       </div>

@@ -9,8 +9,8 @@ import './GamePage.css'
 function GamePage() {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const { user } = useSelector((store) => store.session)
-  const { init, game, data } = useSelector((store) => store.game)
+  // const { user } = useSelector((store) => store.session)
+  const { game, data } = useSelector((store) => store.game) // init, game,
   const [lives, setLives] = useState(3);
   const [userScore, setUserScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
@@ -21,7 +21,9 @@ function GamePage() {
     // }, 200);
     // return () => clearInterval(intervalID);
     dispatch(getGame(id));
-  }, [dispatch, id])
+    setUserScore(game?.host_score);
+    setOpponentScore(game?.opponentScore);
+  }, [dispatch, id, game]);
 
   // const tile_cases = (tile) => {
   //   switch (tile.value) {

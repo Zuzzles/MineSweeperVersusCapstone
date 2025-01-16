@@ -1,6 +1,6 @@
 // import { useModal } from "../../context/Modal";
 
-function FriendRequestModal({ username, friendID }) {
+function FriendRequestModal({ username }) { // , friendID
   // const { closeModal } = useModal();
 
   const handleSubmit = async (e) => {

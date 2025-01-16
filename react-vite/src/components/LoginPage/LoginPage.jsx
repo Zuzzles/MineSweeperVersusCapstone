@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux"; // , useSelector
 import { useNavigate } from "react-router-dom";
 import { thunkLogin } from "../../redux/session";
 import OpenModalButton from "../OpenModalButton";
@@ -9,7 +9,7 @@ import SignupFormModal from "../SignupFormModal";
 function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { user, loading } = useSelector(store => store.session)
+  // const { user, loading } = useSelector(store => store.session)
   const [errors, setErrors] = useState({});
 
   const handleLogin1 = async (e) => {

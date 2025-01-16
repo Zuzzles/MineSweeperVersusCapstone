@@ -19,7 +19,7 @@ function ChallengeAcceptModal({ request }) {
   const navigate = useNavigate();
   const { init } = useSelector((store) => store.game);
   const [opponentColor, setOpponentColor] = useState("");
-  const [errors, setErrors] = useState();
+  // const [errors, setErrors] = useState();
   const { closeModal } = useModal(); 
   const colors = ['#4D9DE0', '#E15554', '#E1BC29', '#3BB273', '#7768AE']
 
@@ -41,7 +41,7 @@ function ChallengeAcceptModal({ request }) {
     );
 
     if (serverResponse.type === "game/initialize/rejected") {
-      setErrors(serverResponse);
+      // setErrors(serverResponse);
     } else {
       closeModal();
       navigate(`/game/${init?.id}`);
