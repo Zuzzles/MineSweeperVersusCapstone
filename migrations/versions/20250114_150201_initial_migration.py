@@ -8,6 +8,9 @@ Create Date: 2025-01-14 15:02:01.082166
 from alembic import op
 import sqlalchemy as sa
 
+import os
+environment = os.getenv("FLASK_ENV")
+SCHEMA = os.environ.get("SCHEMA")
 
 # revision identifiers, used by Alembic.
 revision = 'ba0abb3ba3cb'
@@ -25,6 +28,9 @@ def upgrade():
     sa.Column('accepted', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
+    if environment == "production":
+        op.execute(f"ALTER TABLE friends SET SCHEMA {SCHEMA};")
+
     op.create_table('game_board_tiles',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('game_data_id', sa.Integer(), nullable=False),
@@ -35,6 +41,9 @@ def upgrade():
     sa.Column('y_axis', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
+    if environment == "production":
+        op.execute(f"ALTER TABLE game_board_tiles SET SCHEMA {SCHEMA};")
+
     op.create_table('game_data',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('host_score', sa.Integer(), nullable=False),
@@ -45,6 +54,9 @@ def upgrade():
     sa.Column('status', sa.Integer(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
+    if environment == "production":
+        op.execute(f"ALTER TABLE game_data SET SCHEMA {SCHEMA};")
+
     op.create_table('game_requests',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('host_id', sa.Integer(), nullable=False),
@@ -54,6 +66,9 @@ def upgrade():
     sa.Column('declined', sa.Boolean(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
+    if environment == "production":
+        op.execute(f"ALTER TABLE game_requests SET SCHEMA {SCHEMA};")
+
     op.create_table('games',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('host_id', sa.Integer(), nullable=False),
@@ -62,6 +77,9 @@ def upgrade():
     sa.Column('opponent_color', sa.String(), nullable=False),
     sa.PrimaryKeyConstraint('id')
     )
+    if environment == "production":
+        op.execute(f"ALTER TABLE games SET SCHEMA {SCHEMA};")
+
     op.create_table('users',
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(length=40), nullable=False),
@@ -73,6 +91,8 @@ def upgrade():
     sa.UniqueConstraint('email'),
     sa.UniqueConstraint('username')
     )
+    if environment == "production":
+        op.execute(f"ALTER TABLE users SET SCHEMA {SCHEMA};")
     # ### end Alembic commands ###
 
 
