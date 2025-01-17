@@ -266,13 +266,12 @@ def get_game(id):
   else:
     return {'error': 'Unauthorized'}, 401
 
-
-# Update board routes
-# @game_routes.route('/update/<int:id>')
-# def update_game(id):
-#   """
-#   Update game data
-#   """
+@game_routes.route('/update/<int:id>', methods = ['PUT'])
+def update_game(id):
+  """
+  Update game data
+  """
+  
 
 #   try:
 #     game_info = db.session.query(

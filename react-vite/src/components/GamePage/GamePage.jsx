@@ -23,7 +23,7 @@ function GamePage() {
     dispatch(getGame(id));
     setUserScore(game?.host_score);
     setOpponentScore(game?.opponentScore);
-  }, [dispatch, id, game]);
+  }, [dispatch, id]); //game was causing infinite loop
 
   // const tile_cases = (tile) => {
   //   switch (tile.value) {
@@ -87,7 +87,7 @@ function GamePage() {
             >{tile_cases(tile)}</div>
           ))} */}
         </div>
-        <GameBoard game_data={data} id={id} setLives={setLives} lives={lives}/>
+        <GameBoard game_data={data} setLives={setLives} lives={lives}/>
         <div>
           <p>Your Score</p>
           <div>{opponentScore}</div>

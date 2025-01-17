@@ -1,18 +1,19 @@
 import { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { useParams } from "react-router-dom";
-// import { getGame } from "../../redux/game";
-// import { name } from "react-icons/fa6"; FaHeart FaBomb 
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { updateGame } from "../../redux/game";
 import { FaFlag, FaBomb } from "react-icons/fa6";
 import './GamePage.css'
 
-function GameBoard({ game_data, setLives, lives }) {  // id,
-  // const dispatch = useDispatch();
-  // const { id } = useParams();
+// TODO need to add flagged mines
+
+function GameBoard({ game_data, setLives, lives }) { 
+  const dispatch = useDispatch();
+  const { id } = useParams();
   const [localGameData, setLocalGame] = useState([]);
   const [isTilesLoaded, setIsTilesLoaded] = useState(false);
   const [markFlag, setMarkFlag] = useState(false);
-  // const [gameOver, setGameOver] = useState(false);
+  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     if (game_data?.length > 0 && !isTilesLoaded) {
@@ -52,82 +53,93 @@ function GameBoard({ game_data, setLives, lives }) {  // id,
   }
 
   const tileClick = async (tile, index) => {
-
-    if (markFlag) {
-      if (tile.value === 11) {
-        if (tile.flag_color.length === 0) {
-          const tempGameData = [...localGameData];
-          tempGameData[index] = {
-            id: tile.id,
-            flag_color: '#D3D3D3',
-            seen: tile.seen,
-            value: tile.value,
-            x_axis: tile.x_axis,
-            y_axis: tile.y_axis
+    if (!tile.seen) {
+      if (markFlag) {
+        if (tile.value === 11) {
+          if (tile.flag_color.length === 0) {
+            const tempGameData = [...localGameData];
+            tempGameData[index] = {
+              id: tile.id,
+              flag_color: '#D3D3D3',
+              seen: tile.seen,
+              value: tile.value,
+              x_axis: tile.x_axis,
+              y_axis: tile.y_axis
+            }
+            setLocalGame(tempGameData);
+            console.log("!!! flag")
+            dispatch(updateGame)
           }
-          setLocalGame(tempGameData);
-          // add to score
+        } else {
+          if (lives === 1) {
+            setLocalGame(localGameData.map(currTile => ({
+              id: currTile.id,
+              flag_color: currTile.flag_color,
+              seen: true,
+              value: currTile.value,
+              x_axis: currTile.x_axis,
+              y_axis: currTile.y_axis
+            })));
+            setLives(0);
+            setGameOver(true);
+            // set game status to lose
+            console.log("!!! no lives")
+          } else {
+            setLives(lives - 1);
+            // dispatch change game lives
+            console.log("!!! lose life")
+          }
         }
       } else {
-        if (lives === 1) {
-          setLocalGame(localGameData.map(currTile => ({
-            id: currTile.id,
-            flag_color: currTile.flag_color,
-            seen: true,
-            value: currTile.value,
-            x_axis: currTile.x_axis,
-            y_axis: currTile.y_axis
-          })));
-          setLives(0);
-          // set game status to lose
-        } else {
-          setLives(lives - 1);
-          // dispatch change game lives
-        }
-      }
-    } else {
-      if (tile.value === 11) {
-        setLocalGame(localGameData.map(currTile => ({
-          id: currTile.id,
-          flag_color: currTile.flag_color,
-          seen: true,
-          value: currTile.value,
-          x_axis: currTile.x_axis,
-          y_axis: currTile.y_axis
-        })))
-      }
-      else {
-        const seenList = [[tile, index]];
-        const tempGameData = [...localGameData];
-        while (seenList.length > 0) {
-          const currData = seenList.pop();
-          const currTile = currData[0];
-          const currIndex = currData[1];
-          tempGameData[currIndex] = {
-            id: currTile.id,
-            flag_color: currTile.flag_color,
-            seen: true,
-            value: currTile.value,
-            x_axis: currTile.x_axis,
-            y_axis: currTile.y_axis
+        if (tile.value === 11) {
+          if (tile.flag_color.length === 0) {
+            setLocalGame(localGameData.map(currTile => ({
+              id: currTile.id,
+              flag_color: currTile.flag_color,
+              seen: true,
+              value: currTile.value,
+              x_axis: currTile.x_axis,
+              y_axis: currTile.y_axis
+            })))
+            // dispatch set tiles and status
+            console.log("!!! hit mine")
           }
-          if (currTile.value === 0) {
-            for (let i = -1; i < 2; i++) {
-              for (let j = -1; j < 2; j++) {
-                if (isValidTile(currTile.x_axis + i, currTile.y_axis + j)) {
-                  const nextIndex = tempGameData.findIndex((e) => e.x_axis === currTile.x_axis + i && e.y_axis === currTile.y_axis + j);
-                  if (nextIndex !== -1) {
-                    const nextTile = tempGameData[nextIndex];
-                    if (!nextTile.seen) {
-                      seenList.push([ nextTile, nextIndex ])
+        }
+        else {
+          const seenList = [[tile, index]];
+          const tempGameData = [...localGameData];
+          while (seenList.length > 0) {
+            const currData = seenList.pop();
+            const currTile = currData[0];
+            const currIndex = currData[1];
+            tempGameData[currIndex] = {
+              id: currTile.id,
+              flag_color: currTile.flag_color,
+              seen: true,
+              value: currTile.value,
+              x_axis: currTile.x_axis,
+              y_axis: currTile.y_axis
+            }
+            if (currTile.value === 0) {
+              for (let i = -1; i < 2; i++) {
+                for (let j = -1; j < 2; j++) {
+                  if (isValidTile(currTile.x_axis + i, currTile.y_axis + j)) {
+                    const nextIndex = tempGameData.findIndex((e) => e.x_axis === currTile.x_axis + i && e.y_axis === currTile.y_axis + j);
+                    if (nextIndex !== -1) {
+                      const nextTile = tempGameData[nextIndex];
+                      if (!nextTile.seen) {
+                        seenList.push([ nextTile, nextIndex ])
+                      }
                     }
                   }
                 }
               }
             }
           }
+          setLocalGame(tempGameData);
+          console.log("!!! tile clear")
+          // dispatch set game tiles
         }
-        setLocalGame(tempGameData);
       }
     }
   }
@@ -140,6 +152,11 @@ function GameBoard({ game_data, setLives, lives }) {  // id,
 
   return(
    <div>
+      {gameOver ? (
+        <div>
+          Game Over
+        </div>
+      ) : null}
       <div className='grid'>
         {localGameData?.map((tile, index) => (
           <button 

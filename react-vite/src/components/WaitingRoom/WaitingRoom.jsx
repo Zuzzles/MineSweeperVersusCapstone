@@ -13,16 +13,17 @@ function WaitingRoom() {
   // const [set]
   
   useEffect(() => {
-    dispatch(getRequestTo());
     const intervalID = setInterval(() => {
-      dispatch(getActive());
-      if (game) {
-        navigate(`/game/${game.id}`)
-      }
-      if (!(requestTo || loading)) {
-        setDeclined(true);
-        clearInterval(intervalID);
-      }
+      dispatch(getRequestTo()).then(() => dispatch(getActive()))
+        .then(() => {
+          if (game) {
+            navigate(`/game/${game.id}`)
+          }
+          if (!(requestTo || loading)) {
+            setDeclined(true);
+            clearInterval(intervalID);
+          }
+        });
     }, 200);
     return () => clearInterval(intervalID);
   }, [dispatch])

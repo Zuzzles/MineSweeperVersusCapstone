@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify
 from flask_login import current_user, login_required
 from app.models import User, Friend, db
-from sqlalchemy.sql import collate
+from sqlalchemy import func
 
 user_routes = Blueprint('users', __name__)
 
@@ -12,7 +12,7 @@ def users():
     """
     Query for all users and returns them in a list of user dictionaries
     """
-    users = User.query.order_by(collate(User.username, 'NOCASE')).filter(User.id != current_user.id).all()
+    users = User.query.order_by(func.lower(User.username)).filter(User.id != current_user.id).all()
     print("!!!", users)
     return {'users': [user.to_dict_list() for user in users]}
 
@@ -31,7 +31,7 @@ def user_friends():
                 User, User.id == Friend.friend_id
             ).filter(Friend.user_id == current_user.id).filter(
                 Friend.accepted == True
-            ).order_by(collate(User.username, 'NOCASE')).all()
+            ).order_by(func.lower(User.username)).all()
 
             friend_requests = db.session.query(
                 Friend,
