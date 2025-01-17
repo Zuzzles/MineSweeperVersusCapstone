@@ -271,7 +271,38 @@ def update_game(id):
   """
   Update game data
   """
-  
+  if current_user.is_authenticated:
+    try:
+      csrf_token = request.cookies.get('csrf_token')
+      try:
+        validate_csrf(csrf_token)
+      except:
+        return {'error': 'CSRF token is invalid'}, 400
+
+      game = Game.query.filter(Game.id == id).first()
+      game_data = db.session.query(
+        GameData,
+        GameBoardTile
+      ).join(
+        GameBoardTile, GameBoardTile.game_data_id == GameData.id
+      ).filter(Game.id == id).all()
+
+      # game: 
+        # update current users lives using game
+        # must be in range 0 through 3
+        # if 0 set status to other user win
+      
+      # tile loop:
+        # if flag != currFlag and currFlag == "" add user Id color
+          # count flags with not "" for flag color
+          # if flags total = total mines (15) set game status to whoever won
+        # if seen set seen
+
+    except Exception as e:
+      return {'error': str(e)}, 500
+    
+  else:
+    return {'error': 'Unauthorized'}, 401
 
 #   try:
 #     game_info = db.session.query(
