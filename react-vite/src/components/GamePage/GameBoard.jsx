@@ -1,25 +1,22 @@
-import { useEffect, useState } from "react";
-// import { useDispatch, useSelector } from "react-redux";
-// import { useParams } from "react-router-dom";
-// import { getGame } from "../../redux/game";
-// import { name } from "react-icons/fa6"; FaHeart FaBomb 
+import { useState } from "react";  // useEffect
+import { useDispatch } from "react-redux";
+import { useParams } from "react-router-dom";
+import { updateGame, updateGameTiles } from "../../redux/game";
 import { FaFlag, FaBomb } from "react-icons/fa6";
 import './GamePage.css'
 
-function GameBoard({ game_data, setLives, lives }) {  // id,
-  // const dispatch = useDispatch();
-  // const { id } = useParams();
-  const [localGameData, setLocalGame] = useState([]);
-  const [isTilesLoaded, setIsTilesLoaded] = useState(false);
+function GameBoard({ setLives, lives, setGameOver, localGameData, setLocalGame }) { 
+  const dispatch = useDispatch();
+  const { id } = useParams();
+  // const [isTilesLoaded, setIsTilesLoaded] = useState(false);
   const [markFlag, setMarkFlag] = useState(false);
-  // const [gameOver, setGameOver] = useState(false);
 
-  useEffect(() => {
-    if (game_data?.length > 0 && !isTilesLoaded) {
-      setLocalGame(game_data);
-      setIsTilesLoaded(true);
-    }
-  }, [localGameData, game_data, setLocalGame, setIsTilesLoaded, isTilesLoaded])
+  // useEffect(() => {
+  //   if (game_data?.length > 0 && !isTilesLoaded) {
+  //     setLocalGame(game_data);
+  //     setIsTilesLoaded(true);
+  //   }
+  // }, [localGameData, game_data, setLocalGame, setIsTilesLoaded, isTilesLoaded])
 
   const tile_cases = (tile) => {
     if (tile.seen) {
@@ -52,82 +49,97 @@ function GameBoard({ game_data, setLives, lives }) {  // id,
   }
 
   const tileClick = async (tile, index) => {
-
-    if (markFlag) {
-      if (tile.value === 11) {
-        if (tile.flag_color.length === 0) {
-          const tempGameData = [...localGameData];
-          tempGameData[index] = {
-            id: tile.id,
-            flag_color: '#D3D3D3',
-            seen: tile.seen,
-            value: tile.value,
-            x_axis: tile.x_axis,
-            y_axis: tile.y_axis
+    if (!tile.seen) {
+      if (markFlag) {
+        if (tile.value === 11) {
+          if (tile.flag_color.length === 0) {
+            const tempGameData = [...localGameData];
+            tempGameData[index] = {
+              id: tile.id,
+              flag_color: '#D3D3D3',
+              seen: tile.seen,
+              value: tile.value,
+              x_axis: tile.x_axis,
+              y_axis: tile.y_axis
+            }
+            setLocalGame(tempGameData);
+            console.log("!!! flag")
+            dispatch(updateGameTiles({id, tempGameData}))
           }
-          setLocalGame(tempGameData);
-          // add to score
+        } else {
+          let currLives;
+          if (lives === 1) {
+            setLocalGame(localGameData.map(currTile => ({
+              id: currTile.id,
+              flag_color: currTile.flag_color,
+              seen: true,
+              value: currTile.value,
+              x_axis: currTile.x_axis,
+              y_axis: currTile.y_axis
+            })));
+            currLives = 0;
+            setLives(currLives);
+            setGameOver(true);
+            console.log("!!! no lives")
+          } else {
+            currLives = lives - 1
+            setLives(currLives);
+            console.log("!!! lose life")
+          }
+          dispatch(updateGame({id, currLives}))
         }
       } else {
-        if (lives === 1) {
-          setLocalGame(localGameData.map(currTile => ({
-            id: currTile.id,
-            flag_color: currTile.flag_color,
-            seen: true,
-            value: currTile.value,
-            x_axis: currTile.x_axis,
-            y_axis: currTile.y_axis
-          })));
-          setLives(0);
-          // set game status to lose
-        } else {
-          setLives(lives - 1);
-          // dispatch change game lives
-        }
-      }
-    } else {
-      if (tile.value === 11) {
-        setLocalGame(localGameData.map(currTile => ({
-          id: currTile.id,
-          flag_color: currTile.flag_color,
-          seen: true,
-          value: currTile.value,
-          x_axis: currTile.x_axis,
-          y_axis: currTile.y_axis
-        })))
-      }
-      else {
-        const seenList = [[tile, index]];
-        const tempGameData = [...localGameData];
-        while (seenList.length > 0) {
-          const currData = seenList.pop();
-          const currTile = currData[0];
-          const currIndex = currData[1];
-          tempGameData[currIndex] = {
-            id: currTile.id,
-            flag_color: currTile.flag_color,
-            seen: true,
-            value: currTile.value,
-            x_axis: currTile.x_axis,
-            y_axis: currTile.y_axis
+        if (tile.value === 11) {
+          if (tile.flag_color.length === 0) {
+            const tempGameData = localGameData.map(currTile => ({
+              id: currTile.id,
+              flag_color: currTile.flag_color,
+              seen: true,
+              value: currTile.value,
+              x_axis: currTile.x_axis,
+              y_axis: currTile.y_axis
+            }))
+            setLocalGame(tempGameData)
+            setGameOver(true);
+            console.log("!!! hit mine")
+            dispatch(updateGameTiles({id, tempGameData}))
           }
-          if (currTile.value === 0) {
-            for (let i = -1; i < 2; i++) {
-              for (let j = -1; j < 2; j++) {
-                if (isValidTile(currTile.x_axis + i, currTile.y_axis + j)) {
-                  const nextIndex = tempGameData.findIndex((e) => e.x_axis === currTile.x_axis + i && e.y_axis === currTile.y_axis + j);
-                  if (nextIndex !== -1) {
-                    const nextTile = tempGameData[nextIndex];
-                    if (!nextTile.seen) {
-                      seenList.push([ nextTile, nextIndex ])
+        }
+        else {
+          const seenList = [[tile, index]];
+          const tempGameData = [...localGameData];
+          while (seenList.length > 0) {
+            const currData = seenList.pop();
+            const currTile = currData[0];
+            const currIndex = currData[1];
+            tempGameData[currIndex] = {
+              id: currTile.id,
+              flag_color: currTile.flag_color,
+              seen: true,
+              value: currTile.value,
+              x_axis: currTile.x_axis,
+              y_axis: currTile.y_axis
+            }
+            if (currTile.value === 0) {
+              for (let i = -1; i < 2; i++) {
+                for (let j = -1; j < 2; j++) {
+                  if (isValidTile(currTile.x_axis + i, currTile.y_axis + j)) {
+                    const nextIndex = tempGameData.findIndex((e) => e.x_axis === currTile.x_axis + i && e.y_axis === currTile.y_axis + j);
+                    if (nextIndex !== -1) {
+                      const nextTile = tempGameData[nextIndex];
+                      if (!nextTile.seen) {
+                        seenList.push([ nextTile, nextIndex ])
+                      }
                     }
                   }
                 }
               }
             }
           }
+          setLocalGame(tempGameData);
+          console.log("!!! tile clear")
+          dispatch(updateGameTiles({id, tempGameData}))
         }
-        setLocalGame(tempGameData);
       }
     }
   }
