@@ -117,14 +117,32 @@ export const getActive = createAsyncThunk(
 
 export const updateGame = createAsyncThunk(
   "game/update",
-  async ({ id, lives, tiles}, { rejectWithValue }) => {
+  async ({ id, currLives }, { rejectWithValue }) => {
     try {
       const res = await fetch(`/api/game/update/${id}`, {
         method: "PUT", 
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({
-          lives,
-          tiles
+          currLives
+        })
+      });
+      const data = await res.json();
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Error in updating game");
+    }
+  }
+)
+
+export const updateGameTiles = createAsyncThunk(
+  "game/updateTiles",
+  async ({ id, tempGameData }, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/game/update/${id}/tiles`, {
+        method: "PUT", 
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({
+          tempGameData
         })
       });
       const data = await res.json();
@@ -238,7 +256,20 @@ const gameSlice = createSlice({
       })
       .addCase(updateGame.fulfilled, (state, action) => {
         state.loading = false;
-        // state.init = action.payload.game;
+        state.game = action.payload.game;
+      })
+      .addCase(updateGameTiles.pending, (state) => {
+        state.loading = true;
+        state.errors = null;
+      })
+      .addCase(updateGameTiles.rejected, (state, action) => {
+        state.loading = false;
+        state.errors = action.payload;
+      })
+      .addCase(updateGameTiles.fulfilled, (state, action) => {
+        state.loading = false;
+        state.game = action.payload.game;
+        state.data = action.payload.game_tiles
       })
   }
 });

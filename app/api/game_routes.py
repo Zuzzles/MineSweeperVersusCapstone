@@ -266,11 +266,101 @@ def get_game(id):
   else:
     return {'error': 'Unauthorized'}, 401
 
+@game_routes.route('/update/<int:id>/tiles', methods = ['PUT'])
+def update_gam_tiles(id):
+  """
+  Update game data
+  """
+  # helper function to set win
+  def set_win(tot_flag):
+    if game_data[0][1].host_score > game_data[0][1].opponent_score:
+      game_data[0][1].status = 1
+    else:
+      game_data[0][1].status = 2
+
+
+
+  if current_user.is_authenticated:
+    try:
+      with db.session.no_autoflush: 
+        csrf_token = request.cookies.get('csrf_token')
+        try:
+          validate_csrf(csrf_token)
+        except:
+          return {'error': 'CSRF token is invalid'}, 400
+
+        game_data = db.session.query(
+          Game,
+          GameData,
+          GameBoardTile
+        ).join(GameData, GameData.id == Game.id).join(
+          GameBoardTile, GameBoardTile.game_data_id == GameData.id
+        ).filter(Game.id == id).all()
+
+        tiles = request.json['tempGameData']
+        total_flags = 0
+        # print("!!!!", game_data)
+        # print('!!!', tiles)
+        # print("!!!!", current_user.id)
+        # print ("!!!!", game_data[0][0].host_id)
+
+        if current_user.id == game_data[0][0].host_id:
+          user_color = game_data[0][0].host_color
+          for index, tile in enumerate(tiles):
+            game_data[index][2].seen = tile['seen']
+            if tile['flag_color'] != "":
+              total_flags += 1
+              if tile['flag_color'] == "#D3D3D3":
+                game_data[index][2].flag_color = user_color
+                game_data[0][1].host_score = game_data[index][1].host_score + 1
+          set_win(total_flags)
+          db.session.commit()
+          return {
+            'game': game_data[0][1].to_dict_host(), 
+            'game_tiles': [tile[2].to_dict() for tile in game_data]
+          }
+        else:
+          user_color = game_data[0][0].opponent_color
+          # print("!!!", user_color)
+          for index, tile in enumerate(tiles):
+            # print("!!!!", game_data[index][2].seen)
+            game_data[index][2].seen = tile['seen']
+            if tile['flag_color'] != "":
+              total_flags += 1
+              if tile['flag_color'] == "#D3D3D3":
+                game_data[index][2].flag_color = user_color
+                game_data[0][1].opponent_score = game_data[index][1].opponent_score + 1
+          set_win(total_flags)
+          db.session.commit()
+          # print('!!!!', total_flags)
+          return {
+            'game': game_data[0][1].to_dict_opponent(), 
+            'game_tiles': [tile[2].to_dict() for tile in game_data]
+          }
+
+    except Exception as e:
+      return {'error': str(e)}, 500
+    
+  else:
+    return {'error': 'Unauthorized'}, 401
+
 @game_routes.route('/update/<int:id>', methods = ['PUT'])
 def update_game(id):
   """
   Update game data
   """
+  #TODO add in win/lose user update in here
+  def tiles_seen():
+    game_data = db.session.query(
+      Game,
+      GameBoardTile
+    ).join(
+      GameBoardTile, GameBoardTile.game_data_id == Game.id
+    ).filter(Game.id == id).all()
+
+    for tile in game_data:
+      tile[1].seen = True
+
   if current_user.is_authenticated:
     try:
       csrf_token = request.cookies.get('csrf_token')
@@ -279,35 +369,39 @@ def update_game(id):
       except:
         return {'error': 'CSRF token is invalid'}, 400
 
-      game = Game.query.filter(Game.id == id).first()
       game_data = db.session.query(
-        GameData,
-        GameBoardTile
+        Game,
+        GameData
       ).join(
-        GameBoardTile, GameBoardTile.game_data_id == GameData.id
-      ).filter(Game.id == id).all()
+        GameData, GameData.id == Game.id
+      ).filter(Game.id == id).first()
 
-      # game: 
-        # update current users lives using game
-        # must be in range 0 through 3
-        # if 0 set status to other user win
-      
-      # tile loop:
-        # if flag != currFlag and currFlag == "" add user Id color
-          # count flags with not "" for flag color
-          # if flags total = total mines (15) set game status to whoever won
-        # if seen set seen
+      lives = request.json['currLives']
+      # print("!!!!", game_data)
+      # print('!!!', lives)
+
+      if int(lives) in range(0, 4):
+        if current_user.id == game_data[0].host_id:
+          game_data[1].host_lives = lives
+          if lives == 0:
+            game_data[1].status = 2
+            tiles_seen()
+          db.session.commit()
+          return {'game': game_data[1].to_dict_host()}
+        elif current_user.id == game_data[0].opponent_id:
+          game_data[1].opponent_lives = lives
+          if lives == 0:
+            game_data[1].status = 1
+            tiles_seen()
+          db.session.commit()
+          return {'game': game_data[1].to_dict_host()}
+        else:
+          return {'error': 'Unauthorized for this game'}, 401
+      else:
+        return {'error': 'Invalid number of lives'}, 401
 
     except Exception as e:
       return {'error': str(e)}, 500
     
   else:
     return {'error': 'Unauthorized'}, 401
-
-#   try:
-#     game_info = db.session.query(
-#       GameData,
-#       GameBoardTile
-#     ).join(
-#       GameBoardTile, GameBoardTile.game_data_id
-#     )

@@ -1,19 +1,15 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
-import { updateGame } from "../../redux/game";
+import { updateGame, updateGameTiles } from "../../redux/game";
 import { FaFlag, FaBomb } from "react-icons/fa6";
 import './GamePage.css'
 
-// TODO need to add flagged mines
-
-function GameBoard({ game_data, setLives, lives }) { 
+function GameBoard({ game_data, setLives, lives, gameOver, setGameOver, localGameData, setLocalGame }) { 
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [localGameData, setLocalGame] = useState([]);
   const [isTilesLoaded, setIsTilesLoaded] = useState(false);
   const [markFlag, setMarkFlag] = useState(false);
-  const [gameOver, setGameOver] = useState(false);
 
   useEffect(() => {
     if (game_data?.length > 0 && !isTilesLoaded) {
@@ -68,9 +64,10 @@ function GameBoard({ game_data, setLives, lives }) {
             }
             setLocalGame(tempGameData);
             console.log("!!! flag")
-            dispatch(updateGame)
+            dispatch(updateGameTiles({id, tempGameData}))
           }
         } else {
+          let currLives;
           if (lives === 1) {
             setLocalGame(localGameData.map(currTile => ({
               id: currTile.id,
@@ -80,29 +77,32 @@ function GameBoard({ game_data, setLives, lives }) {
               x_axis: currTile.x_axis,
               y_axis: currTile.y_axis
             })));
-            setLives(0);
+            currLives = 0;
+            setLives(currLives);
             setGameOver(true);
-            // set game status to lose
             console.log("!!! no lives")
           } else {
-            setLives(lives - 1);
-            // dispatch change game lives
+            currLives = lives - 1
+            setLives(currLives);
             console.log("!!! lose life")
           }
+          dispatch(updateGame({id, currLives}))
         }
       } else {
         if (tile.value === 11) {
           if (tile.flag_color.length === 0) {
-            setLocalGame(localGameData.map(currTile => ({
+            const tempGameData = localGameData.map(currTile => ({
               id: currTile.id,
               flag_color: currTile.flag_color,
               seen: true,
               value: currTile.value,
               x_axis: currTile.x_axis,
               y_axis: currTile.y_axis
-            })))
-            // dispatch set tiles and status
+            }))
+            setLocalGame(tempGameData)
+            setGameOver(true);
             console.log("!!! hit mine")
+            dispatch(updateGameTiles({id, tempGameData}))
           }
         }
         else {
@@ -138,7 +138,7 @@ function GameBoard({ game_data, setLives, lives }) {
           }
           setLocalGame(tempGameData);
           console.log("!!! tile clear")
-          // dispatch set game tiles
+          dispatch(updateGameTiles({id, tempGameData}))
         }
       }
     }

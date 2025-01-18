@@ -9,9 +9,12 @@ import './GamePage.css'
 function GamePage() {
   const dispatch = useDispatch();
   const { id } = useParams();
-  // const { user } = useSelector((store) => store.session)
-  const { game, data } = useSelector((store) => store.game) // init, game,
+  const { user } = useSelector((store) => store.session)
+  const { init, game, data } = useSelector((store) => store.game) // init, game,
   const [lives, setLives] = useState(3);
+  const [localGameData, setLocalGame] = useState([]);
+  const [userWins, setUserWins] = useState(0);    // 0 undecided, 1 true, 2 false
+  const [gameOver, setGameOver] = useState(false);
   const [userScore, setUserScore] = useState(0);
   const [opponentScore, setOpponentScore] = useState(0);
   
@@ -20,10 +23,40 @@ function GamePage() {
     //   dispatch(getGame(id));
     // }, 200);
     // return () => clearInterval(intervalID);
-    dispatch(getGame(id));
-    setUserScore(game?.host_score);
-    setOpponentScore(game?.opponentScore);
-  }, [dispatch, id]); //game was causing infinite loop
+    dispatch(getGame(id)).then(() => {
+      if (game?.lives !== lives) {
+        setLives(game?.lives)
+      };
+      if (user?.id === init?.host_id) {
+        if (game?.host_score !== userScore) {
+          setUserScore(game?.host_score)
+        }
+        if (game?.opponent_score !== opponentScore) {
+          setOpponentScore(game?.opponent_score)
+        }
+        if (game?.status !== 0) {
+          setGameOver(true)
+          if (game?.status === 1) setUserWins(1)
+          else setUserWins(2)
+          // clear interval
+        }
+      } else if (user?.id === init?.opponent_id) {
+        if (game?.host_score !== opponentScore) {
+          setUserScore(game?.opponent_score)
+        }
+        if (game?.opponent_score !== userScore) {
+          setOpponentScore(game?.host_score)
+        }
+        if (game?.status !== 0) {
+          setGameOver(true)
+          if (game?.status === 2) setUserWins(1)
+          else setUserWins(2)
+          // clear interval
+        }
+      };
+      
+    });
+  }, [dispatch, id, lives, opponentScore, userScore]); //game was causing infinite loop
 
   // const tile_cases = (tile) => {
   //   switch (tile.value) {
@@ -87,7 +120,15 @@ function GamePage() {
             >{tile_cases(tile)}</div>
           ))} */}
         </div>
-        <GameBoard game_data={data} setLives={setLives} lives={lives}/>
+        <GameBoard 
+        game_data={data} 
+        setLives={setLives} 
+        lives={lives} 
+        gameOver={gameOver} 
+        setGameOver={setGameOver}
+        localGameData={localGameData}
+        setLocalGame={setLocalGame}
+        />
         <div>
           <p>Your Score</p>
           <div>{opponentScore}</div>
