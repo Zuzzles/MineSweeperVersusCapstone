@@ -1,22 +1,22 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";  // useEffect
 import { useDispatch } from "react-redux";
 import { useParams } from "react-router-dom";
 import { updateGame, updateGameTiles } from "../../redux/game";
 import { FaFlag, FaBomb } from "react-icons/fa6";
 import './GamePage.css'
 
-function GameBoard({ game_data, setLives, lives, gameOver, setGameOver, localGameData, setLocalGame }) { 
+function GameBoard({ setLives, lives, setGameOver, localGameData, setLocalGame }) { 
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [isTilesLoaded, setIsTilesLoaded] = useState(false);
+  // const [isTilesLoaded, setIsTilesLoaded] = useState(false);
   const [markFlag, setMarkFlag] = useState(false);
 
-  useEffect(() => {
-    if (game_data?.length > 0 && !isTilesLoaded) {
-      setLocalGame(game_data);
-      setIsTilesLoaded(true);
-    }
-  }, [localGameData, game_data, setLocalGame, setIsTilesLoaded, isTilesLoaded])
+  // useEffect(() => {
+  //   if (game_data?.length > 0 && !isTilesLoaded) {
+  //     setLocalGame(game_data);
+  //     setIsTilesLoaded(true);
+  //   }
+  // }, [localGameData, game_data, setLocalGame, setIsTilesLoaded, isTilesLoaded])
 
   const tile_cases = (tile) => {
     if (tile.seen) {
@@ -152,11 +152,6 @@ function GameBoard({ game_data, setLives, lives, gameOver, setGameOver, localGam
 
   return(
    <div>
-      {gameOver ? (
-        <div>
-          Game Over
-        </div>
-      ) : null}
       <div className='grid'>
         {localGameData?.map((tile, index) => (
           <button 

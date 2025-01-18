@@ -273,10 +273,11 @@ def update_gam_tiles(id):
   """
   # helper function to set win
   def set_win(tot_flag):
-    if game_data[0][1].host_score > game_data[0][1].opponent_score:
-      game_data[0][1].status = 1
-    else:
-      game_data[0][1].status = 2
+    if tot_flag == 15:
+      if game_data[0][1].host_score > game_data[0][1].opponent_score:
+        game_data[0][1].status = 1
+      else:
+        game_data[0][1].status = 2
 
 
 
