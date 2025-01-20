@@ -7,6 +7,8 @@ from sqlalchemy import or_, and_
 import random
 import math
 
+# TODO check out local versus of render
+
 game_routes = Blueprint('games', __name__)
 
 # Initializing minesweeper class
@@ -267,19 +269,18 @@ def get_game(id):
     return {'error': 'Unauthorized'}, 401
 
 @game_routes.route('/update/<int:id>/tiles', methods = ['PUT'])
-def update_gam_tiles(id):
+def update_game_tiles(id):
   """
   Update game data
   """
+  unassigned_flag = "#D3D3D3"
   # helper function to set win
-  def set_win(tot_flag):
+  def _set_win(tot_flag):
     if tot_flag == 15:
       if game_data[0][1].host_score > game_data[0][1].opponent_score:
         game_data[0][1].status = 1
       else:
         game_data[0][1].status = 2
-
-
 
   if current_user.is_authenticated:
     try:
@@ -308,13 +309,15 @@ def update_gam_tiles(id):
         if current_user.id == game_data[0][0].host_id:
           user_color = game_data[0][0].host_color
           for index, tile in enumerate(tiles):
-            game_data[index][2].seen = tile['seen']
+            # If the existing tile is already seen/flagged skip it
+            # index = tile in game_data where x = x and y = y
+            game_data[index][2].seen = tile['seen'] # YOU CAN'T UNSEE!!!!
             if tile['flag_color'] != "":
               total_flags += 1
-              if tile['flag_color'] == "#D3D3D3":
+              if tile['flag_color'] == unassigned_flag:
                 game_data[index][2].flag_color = user_color
                 game_data[0][1].host_score = game_data[index][1].host_score + 1
-          set_win(total_flags)
+          _set_win(total_flags)
           db.session.commit()
           return {
             'game': game_data[0][1].to_dict_host(), 
@@ -328,10 +331,10 @@ def update_gam_tiles(id):
             game_data[index][2].seen = tile['seen']
             if tile['flag_color'] != "":
               total_flags += 1
-              if tile['flag_color'] == "#D3D3D3":
+              if tile['flag_color'] == unassigned_flag:
                 game_data[index][2].flag_color = user_color
                 game_data[0][1].opponent_score = game_data[index][1].opponent_score + 1
-          set_win(total_flags)
+          _set_win(total_flags)
           db.session.commit()
           # print('!!!!', total_flags)
           return {

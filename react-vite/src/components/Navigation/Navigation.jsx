@@ -22,29 +22,21 @@ function Navigation() {
   }
 
   return (
-    <ul>
-      <li>
-        <NavLink to="/">Home</NavLink>
-      </li>
-      {init ? (
-        <li>
+    <div className="navbar">
+      <NavLink to="/">Home</NavLink>
+      <div className="navbar-right">
+        {init ? (
           <NavLink to={`/game/${init.id}`}>Active Game</NavLink>
-        </li>
-      ) : null}
-      {!init && requestTo ? (
-        <li>
+        ) : null}
+        {!init && requestTo ? (
           <NavLink to={"/waiting"}>Waiting Room</NavLink>
-        </li>
-      ) : null}
-      {!init && !requestTo && requestsFor?.length !== 0 ? (
-        <li>
+        ) : null}
+        {!init && !requestTo && requestsFor?.length !== 0 ? (
           <NavLink to={"/challenges"}>Game Requests</NavLink>
-        </li>
-      ) : null}
-      <li>
+        ) : null}
         <ProfileButton />
-      </li>
-    </ul>
+      </div>
+    </div>
   );
 }
 

@@ -1,3 +1,22 @@
+.navbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 15px 25px;
+  border-bottom: 1px solid;
+}
+
+.navbar a {
+  text-decoration: none;
+}
+
+.navbar-right {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+}
+
 .profile-dropdown {
   position: absolute;
 }

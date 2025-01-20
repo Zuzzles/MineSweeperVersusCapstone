@@ -6,6 +6,8 @@ import { FaHeart } from "react-icons/fa6";
 import GameBoard from "./GameBoard";
 import './GamePage.css'
 
+// TODO lose goes off incorrectly
+
 function GamePage() {
   const dispatch = useDispatch();
   const { id } = useParams();
@@ -19,7 +21,7 @@ function GamePage() {
   const [opponentScore, setOpponentScore] = useState(0);
   
   useEffect(() => {
-    const dispatchIntervalID = setInterval(() => {
+    // const dispatchIntervalID = setInterval(() => {
       dispatch(getGame(id)).then(() => {
         if (game?.lives !== lives) {
           setLives(game?.lives)
@@ -63,32 +65,32 @@ function GamePage() {
           }
         }
       });
-    }, 500);
-    return () => clearInterval(dispatchIntervalID);
+    // }, 500);
+    // return () => clearInterval(dispatchIntervalID);
   }, [dispatch, id, lives, opponentScore, userScore]); //game was causing infinite loop
 
   const life_cases = (lives) => {
     switch (lives) {
       case 3:
-        return (<div>
+        return (<div className="hearts">
           <FaHeart style={{'color': '#960019'}}/>
           <FaHeart style={{'color': '#960019'}}/>
           <FaHeart style={{'color': '#960019'}}/>
         </div>)
       case 2:
-        return (<div>
+        return (<div className="hearts">
           <FaHeart style={{'color': '#D3D3D3'}}/>
           <FaHeart style={{'color': '#960019'}}/>
           <FaHeart style={{'color': '#960019'}}/>
         </div>)
       case 1:
-        return (<div>
+        return (<div className="hearts">
           <FaHeart style={{'color': '#D3D3D3'}}/>
           <FaHeart style={{'color': '#D3D3D3'}}/>
           <FaHeart style={{'color': '#960019'}}/>
         </div>)
       case 0:
-        return (<div>
+        return (<div className="hearts">
           <FaHeart style={{'color': '#D3D3D3'}}/>
           <FaHeart style={{'color': '#D3D3D3'}}/>
           <FaHeart style={{'color': '#D3D3D3'}}/>
@@ -97,19 +99,25 @@ function GamePage() {
   }
 
   return(
-    <div>
+    <div className="game-page">
       <div className='life-box'>
-        <h3>Lives</h3>
-        <p>Lose these when you place a wrong flag</p>
+        <h3 className="lives-title">Lives</h3>
+        <p className="lives-directions">Lose these when you place a wrong flag</p>
         {life_cases(lives)}
       </div>
-      <div>
-        <div>
-          <p>Your Score</p>
-          <div>{userScore}</div>
+      <div className="game-box-div">
+        <div className="score-box">
+          <div className="score-card">
+            <p>Your Score</p>
+            <div>{userScore}</div>
+          </div>
+          <div className="score-card">
+            <p>Opponent Score</p>
+            <div>{opponentScore}</div>
+        </div>
         </div>
         {gameOver ? (
-          <div>
+          <div className="game-over-div">
             Game Over
             {userWins === 0 ? null : (userWins === 1 ? (
               <h2>You Win!</h2>
@@ -125,10 +133,6 @@ function GamePage() {
         localGameData={localGameData}
         setLocalGame={setLocalGame}
         />
-        <div>
-          <p>Opponent Score</p>
-          <div>{opponentScore}</div>
-        </div>
       </div>
     </div> 
   )

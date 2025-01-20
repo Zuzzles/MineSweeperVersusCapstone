@@ -3,7 +3,8 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getRequestTo, getActive, cancelRequest } from "../../redux/game";
 
-// TODO fix nav in here, add in a is Loading state?
+// TODO on load game decline gets set needs fix
+// TODO fix navigate to game
 
 function WaitingRoom() {
   const dispatch = useDispatch();
