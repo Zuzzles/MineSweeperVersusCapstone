@@ -7,11 +7,16 @@
 }
 
 .challenge-page h2 {
-  margin: 0px
+  margin: 0px;
 }
 
 .challenge-requests {
-  padding: 10px 0px;
+  min-width: 210px;
+}
+
+.challenge-requests h2 {
+  padding: 15px 0px 0px;
+  border-bottom: 1px solid;
 }
 
 .challenge-requests ul {
@@ -22,7 +27,8 @@
   list-style-type: none;
 }
 
-.search-opponent {
-  border: 1px solid;
-  padding: 10px;
+.button-box {
+  display: flex;
+  gap: 5px;
+  padding: 0px 0px 5px 5px;
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getRequestTo, getActive, cancelRequest } from "../../redux/game";
+import './WaitingRoom.css'
 
 // TODO on load game decline gets set needs fix
 // TODO fix navigate to game
@@ -23,7 +24,7 @@ function WaitingRoom() {
       });
       dispatch(getActive()).then((res) => {
         if (res.payload.game) {
-          navigate(`/ga,e/${game.id}`)
+          navigate(`/game/${res.payload.game.id}`)
           clearInterval(intervalID);
         }
       })
@@ -44,13 +45,13 @@ function WaitingRoom() {
 
   return(
     declined ? (
-      <div>
+      <div className="waiting-room">
         <h2>Game has been declined.</h2>
         <button onClick={handleClickNav}>Issue another challenge?</button>
       </div>
     ) : (
-      <div>
-        <div>
+      <div className="waiting-room">
+        <div className="text-stuff">
           <h2>Waiting for Response</h2>
           <p>Please do not click away.</p>
           <p>Game will start upon acceptance.</p>

@@ -1,0 +1,17 @@
+.user-page {
+  font-family: "Calibri", sans-serif;
+  margin: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
+.user-page h1 {
+  margin: 0px;
+  padding: 0px 0px 3px 0px;
+  max-width: 300px;
+  border-bottom: 1px solid;
+}
+
+.user-page p {
+  margin: 16px 0px 16px 16px
+}
