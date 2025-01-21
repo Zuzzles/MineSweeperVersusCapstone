@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getFriendDetails } from "../../redux/friend";
 import { OpenModalMenuItem } from "../Navigation";
 import IssueFormModal from "./IssueChallengeFormModal";
+import './IssueChallenge.css';
 
 function IssuePage() {
   const dispatch = useDispatch();
@@ -23,7 +24,7 @@ function IssuePage() {
   }
 
   return (
-    <div>
+    <div className='challenge-page'>
       <div className="challenge-requests">
         <h2>Choose Opponent</h2>
         <ul>
@@ -36,7 +37,7 @@ function IssuePage() {
           )}
         </ul>
       </div>
-      <div>
+      <div className='search-opponent'>
         <h2>Search Opponent by Username</h2>
         <form onSubmit={handleSearch}>
           <input />

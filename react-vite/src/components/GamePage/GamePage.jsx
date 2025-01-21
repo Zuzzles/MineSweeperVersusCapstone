@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams } from "react-router-dom";
-import { getGame } from "../../redux/game";
+import { getGame, cancelGame } from "../../redux/game";
 import { FaHeart } from "react-icons/fa6";
 import GameBoard from "./GameBoard";
 import './GamePage.css'
@@ -12,7 +12,7 @@ function GamePage() {
   const dispatch = useDispatch();
   const { id } = useParams();
   const { user } = useSelector((store) => store.session)
-  const { init, game, data } = useSelector((store) => store.game) // init, game,
+  const { init } = useSelector((store) => store.game) // init, game,
   const [lives, setLives] = useState(3);
   const [localGameData, setLocalGame] = useState([]);
   const [userWins, setUserWins] = useState(0);    // 0 undecided, 1 true, 2 false
@@ -21,52 +21,52 @@ function GamePage() {
   const [opponentScore, setOpponentScore] = useState(0);
   
   useEffect(() => {
-    // const dispatchIntervalID = setInterval(() => {
-      dispatch(getGame(id)).then(() => {
-        if (game?.lives !== lives) {
-          setLives(game?.lives)
+    const dispatchIntervalID = setInterval(() => {
+      dispatch(getGame(id)).then((res) => {
+        if (res.payload.game?.lives !== lives) {
+          setLives(res.payload.game?.lives)
         }
         if (user?.id === init?.host_id) {
-          if (game?.host_score !== userScore) {
-            setUserScore(game?.host_score)
+          if (res.payload.game?.host_score !== userScore) {
+            setUserScore(res.payload.game?.host_score)
           }
-          if (game?.opponent_score !== opponentScore) {
-            setOpponentScore(game?.opponent_score)
+          if (res.payload.game?.opponent_score !== opponentScore) {
+            setOpponentScore(res.payload.game?.opponent_score)
           }
-          if (game?.status !== 0) {
+          if (res.payload.game?.status !== 0) {
             setGameOver(true)
-            if (game?.status === 1) setUserWins(1)
+            if (res.payload.game?.status === 1) setUserWins(1)
             else setUserWins(2)
             // clear interval
           }
         } else if (user?.id === init?.opponent_id) {
-          if (game?.host_score !== opponentScore) {
-            setUserScore(game?.opponent_score)
+          if (res.payload.game?.host_score !== opponentScore) {
+            setUserScore(res.payload.game?.opponent_score)
           }
-          if (game?.opponent_score !== userScore) {
-            setOpponentScore(game?.host_score)
+          if (res.payload.game?.opponent_score !== userScore) {
+            setOpponentScore(res.payload.game?.host_score)
           }
-          if (game?.status !== 0) {
+          if (res.payload.game?.status !== 0) {
             setGameOver(true)
-            if (game?.status === 2) setUserWins(1)
+            if (res.payload.game?.status === 2) setUserWins(1)
             else setUserWins(2)
             // clear interval
           }
         }
-        if (!localGameData || localGameData.length === 0) setLocalGame(data)
-        for (let i = 0; i < data.length; i++) {
-          if (data[i].seen !== localGameData[i].seen) {
-            setLocalGame(data)
+        if (!localGameData || localGameData.length === 0) setLocalGame(res.payload.game_tiles)
+        for (let i = 0; i < res.payload.game_tiles.length; i++) {
+          if (res.payload.game_tiles[i].seen !== localGameData[i].seen) {
+            setLocalGame(res.payload.game_tiles)
             break;
           }
-          if (data[i].flag_color !== localGameData[i].flag_color) {
-            setLocalGame(data)
+          if (res.payload.game_tiles[i].flag_color !== localGameData[i].flag_color) {
+            setLocalGame(res.payload.game_tiles)
             break;
           }
         }
       });
-    // }, 500);
-    // return () => clearInterval(dispatchIntervalID);
+    }, 500);
+    return () => clearInterval(dispatchIntervalID);
   }, [dispatch, id, lives, opponentScore, userScore]); //game was causing infinite loop
 
   const life_cases = (lives) => {
@@ -134,6 +134,7 @@ function GamePage() {
         setLocalGame={setLocalGame}
         />
       </div>
+      <button onClick={() => dispatch(cancelGame(id))}>Cancel Game</button>
     </div> 
   )
 }

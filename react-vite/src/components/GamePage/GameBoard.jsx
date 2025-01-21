@@ -62,6 +62,7 @@ function GameBoard({ setLives, lives, setGameOver, localGameData, setLocalGame }
               x_axis: tile.x_axis,
               y_axis: tile.y_axis
             }
+            console.log(tempGameData)
             setLocalGame(tempGameData);
             console.log("!!! flag")
             dispatch(updateGameTiles({id, tempGameData}))

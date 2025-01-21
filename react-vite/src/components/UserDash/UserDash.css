@@ -3,6 +3,7 @@
   height: 90vh;
   align-items: center;
   justify-content: space-evenly;
+  font-family: "Calibri", sans-serif;
 }
 
 .user-dash a {

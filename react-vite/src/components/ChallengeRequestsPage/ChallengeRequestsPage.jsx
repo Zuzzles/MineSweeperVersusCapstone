@@ -1,15 +1,16 @@
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { Navigate } from "react-router-dom"; // useNavigate,
-import { getActive, getRequestTo, getRequestsFor } from "../../redux/game";
+import { Navigate, useNavigate } from "react-router-dom"; // useNavigate,
+import { getActive, getRequestTo, getRequestsFor, cancelRequest } from "../../redux/game";
 import OpenModalButton from "../OpenModalButton";
 import ChallengeAcceptModal from "./ChallengeAcceptModal";
+import './ChallengeRequest.css'
 
 // TODO: handle decline request
 
 function ChallengeRequests() {
   const dispatch = useDispatch();
-  // const navigate = useNavigate();
+  const navigate = useNavigate();
   const { game, requestTo, requestsFor, loading } = useSelector((store) => store.game)
 
   useEffect( () => {
@@ -18,16 +19,20 @@ function ChallengeRequests() {
     dispatch(getRequestsFor());
   }, [dispatch])
 
-  const handleClick = async (e) => {
-    e.preventDefault();
+  const handleClick = async (id) => {
+    dispatch(cancelRequest(id)).then(() => dispatch(getRequestsFor())).then((res) => {
+      console.log("!!!", res)
+      if(res.payload.requests.length === 0) navigate('/') 
+    }
+    );
   }
 
   return (
-    loading ? (<div>Loading</div>) : (
+    loading ? (<div className="loading">Loading</div>) : (
       game ? (<Navigate to="/"/>) : (
         requestTo ? (<Navigate to="/"/>) : (
           requestsFor ? (
-            <div>
+            <div className='challenge-requests'>
               <h2>Challenge Requests</h2>
               <ul>
                 {requestsFor?.map((request, i) =>
@@ -37,7 +42,7 @@ function ChallengeRequests() {
                     modalComponent={<ChallengeAcceptModal request={request}/>}
                     buttonText={`Accept`}
                     />
-                    <button onClick={handleClick}>Decline</button>
+                    <button onClick={() => handleClick(request.id)}>Decline</button>
                   </li>
                 )}
               </ul>

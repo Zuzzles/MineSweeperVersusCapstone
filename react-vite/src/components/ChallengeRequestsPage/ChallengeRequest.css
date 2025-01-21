@@ -1,0 +1,13 @@
+.loading {
+  font-family: "Calibri", sans-serif;
+}
+
+.challenge-requests {
+  font-family: "Calibri", sans-serif;
+  padding: 0px 15px;
+}
+
+.challenge-requests li {
+  display: flex;
+  gap: 10px;
+}

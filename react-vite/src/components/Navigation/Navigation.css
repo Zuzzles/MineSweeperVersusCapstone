@@ -4,6 +4,7 @@
   justify-content: space-between;
   padding: 20px 15px 25px;
   border-bottom: 1px solid;
+  font-family: "Calibri", sans-serif;
 }
 
 .navbar a {
@@ -17,6 +18,52 @@
   gap: 15px;
 }
 
+.profile-icon {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 50%;
+  height: 30px;
+  width: 30px;
+  padding: 0px;
+  font-size: 100%;
+}
+
 .profile-dropdown {
+  display: flex;
+  flex-direction: column;
   position: absolute;
+  top: 40px;
+  right: 25px;
+  text-decoration: none;
+  background-color: black;
+  list-style-type: none;
+  padding: 15px;
+}
+
+.drop-down-items {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.user-info {
+  padding: 0px 0px 2px;
+  border-bottom: 1px solid;
+}
+
+.user-space {
+  padding: 2px 0px;
+  border-bottom: 1px solid; 
+}
+
+.main-nav {
+  padding: 2px 0px;
+  border-bottom: 1px solid;
+}
+
+.logout {
+  display: flex;
+  justify-content: center;
+  padding: 4px 0px 0px;
 }

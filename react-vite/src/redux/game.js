@@ -153,6 +153,20 @@ export const updateGameTiles = createAsyncThunk(
   }
 )
 
+export const cancelGame = createAsyncThunk(
+  "game/deleteGame",
+  async (id, { rejectWithValue }) => {
+    try {
+      await fetch(`/api/game/delete/${id}`, {
+        method: "DELETE",
+      });
+      return;
+    } catch (error) {
+      return rejectWithValue(error.message || "Delete request failed");
+    }
+  }
+);
+
 const gameSlice = createSlice({
   name: "game",
   initialState,
@@ -270,6 +284,20 @@ const gameSlice = createSlice({
         state.loading = false;
         state.game = action.payload.game;
         state.data = action.payload.game_tiles
+      })
+      .addCase(cancelGame.pending, (state) => {
+        state.loading = true;
+        state.errors = null;
+      })
+      .addCase(cancelGame.rejected, (state, action) => {
+        state.loading = false;
+        state.errors = action.payload;
+      })
+      .addCase(cancelGame.fulfilled, (state) => {
+        state.loading = false;
+        state.init = null;
+        state.game = null;
+        state.data = null;
       })
   }
 });

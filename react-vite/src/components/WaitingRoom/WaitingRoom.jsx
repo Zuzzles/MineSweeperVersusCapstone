@@ -9,34 +9,37 @@ import { getRequestTo, getActive, cancelRequest } from "../../redux/game";
 function WaitingRoom() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { game, requestTo, loading } = useSelector((store) => store.game)
+  const { game, requestTo } = useSelector((store) => store.game)
   const [declined, setDeclined] = useState(false)
   // const [set]
   
   useEffect(() => {
     const intervalID = setInterval(() => {
-      dispatch(getRequestTo()).then(() => dispatch(getActive()))
-        .then(() => {
-          if (game) {
-            navigate(`/game/${game.id}`)
-          }
-          if (!(requestTo || loading)) {
-            setDeclined(true);
-            clearInterval(intervalID);
-          }
-        });
+      dispatch(getRequestTo()).then((res) => {
+        if (!res.payload.request) {
+          setDeclined(true);
+          clearInterval(intervalID);
+        }
+      });
+      dispatch(getActive()).then((res) => {
+        if (res.payload.game) {
+          navigate(`/ga,e/${game.id}`)
+          clearInterval(intervalID);
+        }
+      })
     }, 200);
     return () => clearInterval(intervalID);
-  }, [dispatch])
+  }, [dispatch, navigate])
 
   const handleClickCancel = async (e) => {
     e.preventDefault();
     dispatch(cancelRequest(requestTo.id));
-    navigate('/')
+    navigate('/');
   }
 
   const handleClickNav = async (e) => {
     e.preventDefault();
+    navigate('/issue');
   }
 
   return(

@@ -5,6 +5,7 @@ import { thunkLogin } from "../../redux/session";
 import OpenModalButton from "../OpenModalButton";
 import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
+import './LoginPage.css';
 
 function LoginPage() {
   const dispatch = useDispatch();
@@ -55,7 +56,9 @@ function LoginPage() {
   };
 
   return (
-    <div>
+    <div className='login-page'>
+      <h1>MineSweeper Versus</h1>
+      <div className='reg-login'>
         <OpenModalButton
             buttonText="Log In"
             modalComponent={<LoginFormModal />}
@@ -64,12 +67,15 @@ function LoginPage() {
             buttonText="Sign Up"
             modalComponent={<SignupFormModal />}
         />
+      </div>
+      <div className='demo-login'>
         <button onClick={handleLogin1}>
           Demo 1 Login
         </button>
         <button onClick={handleLogin2}>
           Demo 2 Login
         </button>
+      </div>
     </div>  
   );
 }

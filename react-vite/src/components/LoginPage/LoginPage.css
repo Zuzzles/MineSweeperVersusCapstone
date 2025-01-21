@@ -1,0 +1,19 @@
+.login-page {
+  font-family: "Calibri", sans-serif;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 90vh;
+  gap: 20px;
+}
+
+.reg-login {
+  display: flex;
+  gap: 10px;
+}
+
+.demo-login {
+  display: flex;
+  gap: 10px;
+}
