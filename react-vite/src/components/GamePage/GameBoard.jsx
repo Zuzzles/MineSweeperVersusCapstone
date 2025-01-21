@@ -26,7 +26,7 @@ function GameBoard({ setLives, lives, setGameOver, localGameData, setLocalGame }
         case 11:
           return (<div className = 'MCell'><FaBomb /></div>)
         default:
-          return (<div className = {`${tile.value}Cell`}>{tile.value}</div>)
+          return (<div className = {`Cell${tile.value}`}>{tile.value}</div>)
       }
 
     }
@@ -62,6 +62,7 @@ function GameBoard({ setLives, lives, setGameOver, localGameData, setLocalGame }
               x_axis: tile.x_axis,
               y_axis: tile.y_axis
             }
+            console.log(tempGameData)
             setLocalGame(tempGameData);
             console.log("!!! flag")
             dispatch(updateGameTiles({id, tempGameData}))
@@ -151,7 +152,7 @@ function GameBoard({ setLives, lives, setGameOver, localGameData, setLocalGame }
   }
 
   return(
-   <div>
+   <div className = "game-board">
       <div className='grid'>
         {localGameData?.map((tile, index) => (
           <button 
@@ -162,7 +163,7 @@ function GameBoard({ setLives, lives, setGameOver, localGameData, setLocalGame }
           >{tile_cases(tile, index)}</button>
         ))}
       </div>
-      <button onClick={flagSetClick}>{`flagging mine: ${markFlag}`}</button>
+      <button className="flag-toggle-button" onClick={flagSetClick}>{`flagging mine: ${markFlag}`}</button>
    </div> 
   )
 }

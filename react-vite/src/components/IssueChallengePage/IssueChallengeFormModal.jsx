@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createRequest } from "../../redux/game";
 import { useModal } from "../../context/Modal";
+import "./IssueChallengeModal.css";
 
 // Colors:
 //    #4D9DE0 Celestial blue
@@ -43,11 +44,11 @@ function IssueFormModal({ user }) {
   }
 
   return (
-    <div>
+    <div className="challenge-modal">
       <h2>{`Issue Challenge to ${user?.username}?`}</h2>
       <form onSubmit={handleSubmit}>
+        <label>Choose Color</label>
         <label>
-        Choose Color
         {colors.map((color, i) => (
           <input key={i} 
             onChange={(e) => setHostColor(e.target.value)}

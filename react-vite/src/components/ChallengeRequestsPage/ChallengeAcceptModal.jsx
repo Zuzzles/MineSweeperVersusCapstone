@@ -1,7 +1,7 @@
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { createGame } from "../../redux/game";
+import { createGame, cancelRequest } from "../../redux/game";
 import { useModal } from "../../context/Modal";
 
 // Colors:
@@ -17,7 +17,6 @@ import { useModal } from "../../context/Modal";
 function ChallengeAcceptModal({ request }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { init } = useSelector((store) => store.game);
   const [opponentColor, setOpponentColor] = useState("");
   // const [errors, setErrors] = useState();
   const { closeModal } = useModal(); 
@@ -44,7 +43,8 @@ function ChallengeAcceptModal({ request }) {
       // setErrors(serverResponse);
     } else {
       closeModal();
-      navigate(`/game/${init?.id}`);
+      dispatch(cancelRequest(request.id))
+      navigate(`/game/${serverResponse.payload.game.id}`);
     }
   }
 

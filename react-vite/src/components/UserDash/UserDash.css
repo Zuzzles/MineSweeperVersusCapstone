@@ -1,0 +1,22 @@
+.user-dash {
+  display: flex;
+  height: 90vh;
+  align-items: center;
+  justify-content: space-evenly;
+  font-family: "Calibri", sans-serif;
+}
+
+.user-dash a {
+  display: flex;
+  text-decoration: none;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid;
+  border-radius: 50%;
+  height: 200px;
+  width: 200px;
+}
+
+.user-dash a:hover {
+  transform: translateY(-5px)
+}

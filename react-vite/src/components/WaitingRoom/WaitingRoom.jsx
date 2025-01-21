@@ -3,39 +3,43 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { getRequestTo, getActive, cancelRequest } from "../../redux/game";
 
-// TODO fix nav in here, add in a is Loading state?
+// TODO on load game decline gets set needs fix
+// TODO fix navigate to game
 
 function WaitingRoom() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { game, requestTo, loading } = useSelector((store) => store.game)
+  const { game, requestTo } = useSelector((store) => store.game)
   const [declined, setDeclined] = useState(false)
   // const [set]
   
   useEffect(() => {
     const intervalID = setInterval(() => {
-      dispatch(getRequestTo()).then(() => dispatch(getActive()))
-        .then(() => {
-          if (game) {
-            navigate(`/game/${game.id}`)
-          }
-          if (!(requestTo || loading)) {
-            setDeclined(true);
-            clearInterval(intervalID);
-          }
-        });
+      dispatch(getRequestTo()).then((res) => {
+        if (!res.payload.request) {
+          setDeclined(true);
+          clearInterval(intervalID);
+        }
+      });
+      dispatch(getActive()).then((res) => {
+        if (res.payload.game) {
+          navigate(`/ga,e/${game.id}`)
+          clearInterval(intervalID);
+        }
+      })
     }, 200);
     return () => clearInterval(intervalID);
-  }, [dispatch])
+  }, [dispatch, navigate])
 
   const handleClickCancel = async (e) => {
     e.preventDefault();
     dispatch(cancelRequest(requestTo.id));
-    navigate('/')
+    navigate('/');
   }
 
   const handleClickNav = async (e) => {
     e.preventDefault();
+    navigate('/issue');
   }
 
   return(

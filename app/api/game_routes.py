@@ -7,6 +7,8 @@ from sqlalchemy import or_, and_
 import random
 import math
 
+# TODO check out local versus of render
+
 game_routes = Blueprint('games', __name__)
 
 # Initializing minesweeper class
@@ -219,11 +221,16 @@ def get_active():
   """
   if current_user.is_authenticated:
     try:
-      active_game = Game.query.filter(
+      active_game = db.session.query(
+        Game,
+        GameData
+      ).join(GameData, GameData.id == Game.id).filter(
         or_(current_user.id == Game.host_id, current_user.id == Game.opponent_id)
+      ).filter(
+        GameData.status == 0
       ).first()
       
-      return {'game': active_game.to_dict()}
+      return {'game': active_game[0].to_dict()}
 
     except Exception as e:
       return {'error': str(e)}, 500
@@ -267,19 +274,18 @@ def get_game(id):
     return {'error': 'Unauthorized'}, 401
 
 @game_routes.route('/update/<int:id>/tiles', methods = ['PUT'])
-def update_gam_tiles(id):
+def update_game_tiles(id):
   """
   Update game data
   """
+  unassigned_flag = "#D3D3D3"
   # helper function to set win
-  def set_win(tot_flag):
+  def _set_win(tot_flag):
     if tot_flag == 15:
       if game_data[0][1].host_score > game_data[0][1].opponent_score:
         game_data[0][1].status = 1
       else:
         game_data[0][1].status = 2
-
-
 
   if current_user.is_authenticated:
     try:
@@ -299,22 +305,27 @@ def update_gam_tiles(id):
         ).filter(Game.id == id).all()
 
         tiles = request.json['tempGameData']
+        # print("!!!flag_color unass", unassigned_flag)
         total_flags = 0
-        # print("!!!!", game_data)
-        # print('!!!', tiles)
-        # print("!!!!", current_user.id)
-        # print ("!!!!", game_data[0][0].host_id)
 
         if current_user.id == game_data[0][0].host_id:
           user_color = game_data[0][0].host_color
-          for index, tile in enumerate(tiles):
-            game_data[index][2].seen = tile['seen']
-            if tile['flag_color'] != "":
-              total_flags += 1
-              if tile['flag_color'] == "#D3D3D3":
-                game_data[index][2].flag_color = user_color
-                game_data[0][1].host_score = game_data[index][1].host_score + 1
-          set_win(total_flags)
+          for tile in tiles:
+            # print("!!!tile", tile)
+            for (_, _, game_tile) in game_data:
+              # index = tile in game_data where x = x and y = y
+              if game_tile.x_axis == tile['x_axis'] and game_tile.y_axis == tile['y_axis']:
+                # print("!!!backend tile", game_tile)
+                # If the existing tile is already seen/flagged skip it
+                if tile['flag_color'] != "" and tile['value'] == 11:
+                  total_flags += 1
+                if not game_tile.seen and game_tile.flag_color == "":
+                  if game_tile.value != 11:
+                    game_tile.seen = tile['seen']
+                  if tile['flag_color'] == unassigned_flag:
+                    game_tile.flag_color = user_color
+                    game_data[0][1].host_score = game_data[0][1].host_score + 1
+          _set_win(total_flags)
           db.session.commit()
           return {
             'game': game_data[0][1].to_dict_host(), 
@@ -323,15 +334,21 @@ def update_gam_tiles(id):
         else:
           user_color = game_data[0][0].opponent_color
           # print("!!!", user_color)
-          for index, tile in enumerate(tiles):
-            # print("!!!!", game_data[index][2].seen)
-            game_data[index][2].seen = tile['seen']
-            if tile['flag_color'] != "":
-              total_flags += 1
-              if tile['flag_color'] == "#D3D3D3":
-                game_data[index][2].flag_color = user_color
-                game_data[0][1].opponent_score = game_data[index][1].opponent_score + 1
-          set_win(total_flags)
+          for tile in tiles:
+            print("!!!tile", tile)
+            for (_, _, game_tile) in game_data:
+              # index = tile in game_data where x = x and y = y
+              if game_tile.x_axis == tile['x_axis'] and game_tile.y_axis == tile['y_axis']:
+                # If the existing tile is already seen/flagged skip it
+                if tile['flag_color'] != "" and tile['value'] == 11:
+                  total_flags += 1
+                if not game_tile.seen and game_tile.flag_color == "":
+                  if game_tile.value != 11:
+                    game_tile.seen = tile['seen']
+                  if tile['flag_color'] == unassigned_flag:
+                    game_tile.flag_color = user_color
+                    game_data[0][1].opponent_score = game_data[0][1].opponent_score + 1
+          _set_win(total_flags)
           db.session.commit()
           # print('!!!!', total_flags)
           return {
@@ -406,3 +423,37 @@ def update_game(id):
     
   else:
     return {'error': 'Unauthorized'}, 401
+  
+@game_routes.route('/delete/<int:id>', methods=['DELETE'])
+def delete_full_game(id):
+  """
+  delete game fully
+  """
+  try:
+    csrf_token = request.cookies.get('csrf_token')
+    try:
+      validate_csrf(csrf_token)
+    except:
+      return {'error': 'CSRF token is invalid'}, 400
+
+    game_info = db.session.query(
+        Game,
+        GameData,
+        GameBoardTile
+      ).join(GameData, GameData.id == Game.id).join(
+        GameBoardTile, GameBoardTile.game_data_id == GameData.id
+      ).filter(Game.id == id).all()
+    
+    if not game_info:
+      return {'error': 'request not found'}, 404
+    
+    for (_, _, game_tile) in game_info:
+      db.session.delete(game_tile)
+    db.session.delete(game_info[0][1])
+    db.session.delete(game_info[0][0])
+    db.session.commit()
+
+    return {'message': "Request deleted successfully"}, 200
+  
+  except Exception as e:
+    return {'error': str(e)}, 500

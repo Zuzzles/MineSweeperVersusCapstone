@@ -1,0 +1,28 @@
+.challenge-page {
+  font-family: "Calibri", sans-serif;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.challenge-page h2 {
+  margin: 0px
+}
+
+.challenge-requests {
+  padding: 10px 0px;
+}
+
+.challenge-requests ul {
+  padding: 0px 0px 0px 20px;
+}
+
+.challenge-requests li {
+  list-style-type: none;
+}
+
+.search-opponent {
+  border: 1px solid;
+  padding: 10px;
+}
