@@ -65,7 +65,7 @@ function GamePage() {
           }
         }
       });
-    }, 500);
+    }, 200);
     return () => clearInterval(dispatchIntervalID);
   }, [dispatch, id, lives, opponentScore, userScore]); //game was causing infinite loop
 
