@@ -26,11 +26,11 @@
 }
 
 .in-link {
-  background-image: url('../../../public/images/button_background.png');
+  background-image: url('/images/button_background.png');
 }
 
 .add-link {
-  background-image: url('../../../public/images/button_background.png');
+  background-image: url('/images/button_background.png');
   background-position: top;
 }
 

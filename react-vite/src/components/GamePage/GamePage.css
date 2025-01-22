@@ -142,3 +142,8 @@
   cursor: pointer;
   padding: 3px;
 }
+
+.unflagged-hid {
+  display: flex;
+  border: 14px solid lightblue;
+}
