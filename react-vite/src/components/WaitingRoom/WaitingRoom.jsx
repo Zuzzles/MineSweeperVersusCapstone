@@ -10,7 +10,7 @@ import './WaitingRoom.css'
 function WaitingRoom() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const { game, requestTo } = useSelector((store) => store.game)
+  const { requestTo } = useSelector((store) => store.game)  // removed game
   const [declined, setDeclined] = useState(false)
   // const [set]
   

@@ -1,23 +1,23 @@
-.signup-modal {
+.edit-user-modal {
   font-family: "Calibri", sans-serif;
   padding: 45px 35px;
 }
 
-.signup-modal h1 {
+.edit-user-modal h1 {
   margin: 0px 0px 20px;
 }
 
-.signup-modal form {
+.edit-user-modal form {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.signup-modal input {
+.edit-user-modal input {
   margin: 0px 0px 0px 5px
 }
 
-.signup-modal button {
+.edit-user-modal button {
   width: 150px;
   height: 30px;
   margin: 20px 0px 0px;

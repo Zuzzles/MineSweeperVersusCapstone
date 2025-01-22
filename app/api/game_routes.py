@@ -62,16 +62,18 @@ def game_request_issue():
         Game,
         GameData
       ).filter(and_(
-        Game.opponent_id == form.data['opponentID'], GameData.status == 0
+        or_(
+          Game.host_id == current_user.id, Game.opponent_id == current_user.id
+        ), GameData.status == 0
       )).first()
       if game_data:
-        return {'error': 'You have an active game, either play or cancel game.'}, 401
+        return {'game_request': 'You have an active game, either play or cancel game.'}, 401
       if GameRequest.query.filter(and_(
         GameRequest.host_id == current_user.id,
         GameRequest.accepted == False,
         GameRequest.declined == False
       )).first():
-        return {'error': 'You have already requested a game, cancel your request to issue a new one.'}, 401
+        return {'game_request': 'You have already requested a game, cancel your request to issue a new one.'}, 401
       if form.validate_on_submit():
         game_request = GameRequest(
           host_id = current_user.id,
@@ -322,6 +324,9 @@ def update_game_tiles(id):
                 if not game_tile.seen and game_tile.flag_color == "":
                   if game_tile.value != 11:
                     game_tile.seen = tile['seen']
+                  else:
+                    game_tile.seen = tile['seen']
+                    game_data[0][1].status = 2
                   if tile['flag_color'] == unassigned_flag:
                     game_tile.flag_color = user_color
                     game_data[0][1].host_score = game_data[0][1].host_score + 1
@@ -345,6 +350,9 @@ def update_game_tiles(id):
                 if not game_tile.seen and game_tile.flag_color == "":
                   if game_tile.value != 11:
                     game_tile.seen = tile['seen']
+                  else:
+                    game_tile.seen = tile['seen']
+                    game_data[0][1].status = 1
                   if tile['flag_color'] == unassigned_flag:
                     game_tile.flag_color = user_color
                     game_data[0][1].opponent_score = game_data[0][1].opponent_score + 1

@@ -14,6 +14,9 @@ export const getUsers = createAsyncThunk(
     try {
       const res = await fetch("/api/users/");
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in getting user list");
@@ -27,6 +30,9 @@ export const getFriendDetails = createAsyncThunk(
     try {
       const res = await fetch("/api/users/friends");
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in getting friends")
@@ -40,6 +46,9 @@ export const getRequestedFriends = createAsyncThunk(
     try {
       const res = await fetch("/api/users/requested_friends");
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in getting friends")
@@ -53,6 +62,9 @@ export const createFriendRequest = createAsyncThunk(
     try {
       const res = await fetch(`/api/users/friend/request/create/${id}`);
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in creating request")
@@ -66,6 +78,9 @@ export const acceptFriendRequest = createAsyncThunk(
     try {
       const res = await fetch(`/api/users/friend/request/${id}/accept`);
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in creating request")
@@ -79,6 +94,9 @@ export const declineFriendRequest = createAsyncThunk(
     try {
       const res = await fetch(`/api/users/friend/request/${id}/decline`);
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in creating request")

@@ -1,5 +1,8 @@
 .game-page {
   font-family: "Calibri", sans-serif;
+  display: flex;
+  flex-direction: column;
+  height: 90vh;
 }
 
 .life-box {
@@ -83,4 +86,12 @@
 .flag-toggle-button {
   width: 150px;
   height: 50px;
+}
+
+.cancel-button {
+  display: flex;
+  justify-self: end;
+  align-self: center;
+  margin: 20px 0px 0px;
+  padding: 10px;
 }

@@ -1,14 +1,17 @@
-import { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+// import { useEffect } from "react";
+import { useSelector } from "react-redux";  // removed useDispatch
 // import { Link } from "react-router-dom"
 import OpenModalButton from '../OpenModalButton';
+import EditUserModal from "./EditUserModal";
+import DeleteUserModal from "./DeleteUserModal";
 import './UserPage.css'
 
 // TODO add in edit user and delete user, don't let them if it's demo
 // TODO add css for buttons
+// TODO add change password space
 
 function ChallengesPage() {
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
   const { user } = useSelector((store) => store.session)
 
   return (
@@ -19,8 +22,8 @@ function ChallengesPage() {
         <p>Email: {user?.email}</p>
       </div>
       <div className="button-box">
-       <button>Edit User</button>
-       <button>Remove User</button>
+       <OpenModalButton modalComponent={<EditUserModal user={user}/>} buttonText='Edit User'/>
+       <OpenModalButton modalComponent={<DeleteUserModal user={user}/>} buttonText='Delete User'/>
       </div>
     </div>
   )
