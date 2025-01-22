@@ -324,7 +324,7 @@ def update_game_tiles(id):
                 if not game_tile.seen and game_tile.flag_color == "":
                   if game_tile.value != 11:
                     game_tile.seen = tile['seen']
-                  else:
+                  elif tile['seen'] == True:
                     game_tile.seen = tile['seen']
                     game_data[0][1].status = 2
                   if tile['flag_color'] == unassigned_flag:
@@ -350,7 +350,7 @@ def update_game_tiles(id):
                 if not game_tile.seen and game_tile.flag_color == "":
                   if game_tile.value != 11:
                     game_tile.seen = tile['seen']
-                  else:
+                  elif tile['seen'] == True:
                     game_tile.seen = tile['seen']
                     game_data[0][1].status = 1
                   if tile['flag_color'] == unassigned_flag:

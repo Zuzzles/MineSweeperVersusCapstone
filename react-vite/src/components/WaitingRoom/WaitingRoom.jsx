@@ -6,6 +6,7 @@ import './WaitingRoom.css'
 
 // TODO on load game decline gets set needs fix
 // TODO fix navigate to game
+// TODO fix button
 
 function WaitingRoom() {
   const dispatch = useDispatch();

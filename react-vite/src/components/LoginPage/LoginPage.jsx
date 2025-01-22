@@ -7,6 +7,10 @@ import LoginFormModal from "../LoginFormModal";
 import SignupFormModal from "../SignupFormModal";
 import './LoginPage.css';
 
+// TODO add in background image 
+// TODO change button colors
+// TODO add in icon
+
 function LoginPage() {
   const dispatch = useDispatch();
   const navigate = useNavigate();

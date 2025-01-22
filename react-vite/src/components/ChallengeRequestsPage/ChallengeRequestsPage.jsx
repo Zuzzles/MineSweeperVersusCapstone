@@ -7,6 +7,7 @@ import ChallengeAcceptModal from "./ChallengeAcceptModal";
 import './ChallengeRequest.css'
 
 // TODO: handle decline request
+// TODO fix button
 
 function ChallengeRequests() {
   const dispatch = useDispatch();

@@ -5,6 +5,8 @@ import { getActive, getRequestTo, getRequestsFor } from "../../redux/game";
 import ProfileButton from "./ProfileButton";
 import "./Navigation.css";
 
+// TODO make navigation home button
+
 function Navigation() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
