@@ -4,6 +4,9 @@ import { NavLink, useNavigate } from "react-router-dom";
 import { FaUserCircle } from 'react-icons/fa';
 import { thunkLogout } from "../../redux/session";
 
+// TODO pick background color and round edges
+// TODO fix logout button
+
 function ProfileButton() {
   const dispatch = useDispatch();
   const navigate = useNavigate();

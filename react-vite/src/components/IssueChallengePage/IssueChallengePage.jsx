@@ -12,6 +12,7 @@ function IssuePage() {
 
   // TODO: css styling
   // TODO: get search working
+  // TODO add issue clause for if the opponent has already sent you a request
 
   useEffect(() => {
     dispatch(getFriendDetails());
