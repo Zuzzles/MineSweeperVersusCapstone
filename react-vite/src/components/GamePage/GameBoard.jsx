@@ -32,7 +32,7 @@ function GameBoard({ setLives, lives, setGameOver, localGameData, setLocalGame }
     }
     else {
       if (tile.flag_color.length === 0) {
-        return <div className = 'hidden'>{`H${tile.value}`}</div>
+        return <div className = 'hidden' style={{'cursor' : 'pointer'}}>{`H${tile.value}`}</div>
       } else {
         return <div className = 'hidden'><FaFlag style={{'color': `${tile.flag_color}`}}/></div>
       }

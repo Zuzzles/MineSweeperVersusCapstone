@@ -25,7 +25,7 @@ function Navigation() {
 
   return (
     <div className="navbar">
-      <NavLink to="/">Home</NavLink>
+      <NavLink to="/"><img className='home-img' src="../../../public/images/Naval_Mine_scribblenauts.webp" /></NavLink>
       <div className="navbar-right">
         {init ? (
           <NavLink to={`/game/${init.id}`}>Active Game</NavLink>

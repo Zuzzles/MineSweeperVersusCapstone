@@ -1,19 +1,23 @@
 .user-page {
   font-family: "Calibri", sans-serif;
-  margin: 20px;
   display: flex;
   flex-direction: column;
+  height: 90vh;
 }
 
 .user-page h1 {
-  margin: 0px;
+  margin: 0px 0px 0px 20px;
   padding: 0px 0px 3px 0px;
   max-width: 300px;
   border-bottom: 1px solid;
 }
 
 .user-page p {
-  margin: 16px 0px 16px 16px
+  margin: 16px 0px 16px 36px
+}
+
+.button-box {
+  margin: 0px 0px 0px 20px;
 }
 
 .button-box button {
@@ -24,7 +28,6 @@
   border-radius: .25rem;
   box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
   box-sizing: border-box;
-  color: #fff;
   cursor: pointer;
   display: inline-flex;
   justify-content: center;
