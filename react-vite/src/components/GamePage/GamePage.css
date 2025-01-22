@@ -79,13 +79,48 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 28px;
-  height: 28px;
+  width: 35px;
+  aspect-ratio: 1/1;
 }
 
 .flag-toggle-button {
   width: 150px;
   height: 50px;
+  align-items: center;
+  background-clip: padding-box;
+  background-color: #49fcac;
+  border: 1px solid transparent;
+  border-radius: .25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  cursor: pointer;
+  display: inline-flex;
+  justify-content: center;
+  line-height: 1.25;
+  margin: 0;
+  padding: 3px 5px 1px;
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  width: auto;
+}
+
+.flag-toggle-button:hover,
+.flag-toggle-button:focus {
+  background-color: #2f9e6c;
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+}
+
+.flag-toggle-button:hover {
+  transform: translateY(-1px);
+}
+
+.flag-toggle-button:active {
+  background-color: #1d6142;
+  box-shadow: rgba(0, 0, 0, .06) 0 2px 4px;
 }
 
 .cancel-button {
@@ -94,4 +129,16 @@
   align-self: center;
   margin: 20px 0px 0px;
   padding: 10px;
+  background-color: brown;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.game-over-div button {
+  background-color: brown;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  padding: 3px;
 }

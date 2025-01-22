@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { createGame, cancelRequest } from "../../redux/game";
 import { useModal } from "../../context/Modal";
+import './ChallengeAcceptModal.css'
 
 // Colors:
 //    #4D9DE0 Celestial blue
@@ -49,11 +50,11 @@ function ChallengeAcceptModal({ request }) {
   }
 
   return (
-    <div>
+    <div className="challenge-accept">
       <h2>{`Accept Challenge from ${request?.host_name}?`}</h2>
       <form onSubmit={handleSubmit}>
+        <label>Choose Color</label>
         <label>
-        Choose Color
         {colors.map((color, i) => (
           color === request.host_color ? null : (
             <input key={i} 

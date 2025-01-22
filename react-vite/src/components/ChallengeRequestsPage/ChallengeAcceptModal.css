@@ -1,0 +1,22 @@
+.challenge-accept {
+  font-family: "Calibri", sans-serif;
+  padding: 45px 35px;
+}
+
+.challenge-accept h2 {
+  margin: 0px 0px 20px;
+}
+
+.challenge-accept form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.challenge-accept button {
+  width: 150px;
+  height: 30px;
+  margin: 20px 0px 0px;
+  background: none;
+  border-radius: 25px;
+}
