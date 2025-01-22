@@ -1,11 +1,14 @@
 from flask import Blueprint, request
-from app.models import User, db
+from flask_wtf.csrf import validate_csrf
+from app.models import User, Friend, db
 from app.forms import LoginForm
-from app.forms import SignUpForm
+from app.forms import SignUpForm, EditUserForm
+from sqlalchemy import or_
 from flask_login import current_user, login_user, logout_user, login_required
 
 auth_routes = Blueprint('auth', __name__)
 
+# TODO add the contingency for active game delete user 
 
 @auth_routes.route('/')
 def authenticate():
@@ -64,6 +67,57 @@ def sign_up():
         return user.to_dict()
     return form.errors, 401
 
+@auth_routes.route('/user/<int:id>/edit', methods=['PUT'])
+@login_required
+def edit_user(id):
+    """
+    Edit user
+    """
+    if current_user.id == id:
+        user = User.query.get(id)
+        form = EditUserForm()
+        form['csrf_token'].data = request.cookies['csrf_token']
+        if form.validate_on_submit():
+            user.username=form.data['username']
+            user.email=form.data['email']
+            db.session.commit()
+            return user.to_dict()
+        return form.errors, 401
+    
+    else: 
+        return {'error': {'message': 'Unauthorized'}}, 401
+
+@auth_routes.route('/user/<int:id>/delete', methods=['DELETE'])
+@login_required
+def delete_user(id):
+    """
+    Delete user
+    """
+    if current_user.id == id:
+        try:
+            csrf_token = request.cookies.get('csrf_token')
+            try:
+                validate_csrf(csrf_token)
+            except:
+                return {'error': 'CSRF token is invalid'}, 400
+            
+            user = User.query.get(id)
+            friends = Friend.query.filter(or_(Friend.user_id == id, Friend.friend_id == id)).all()
+
+            logout_user()
+
+            for friend in friends:
+                db.session.delete(friend)
+            db.session.delete(user)
+            db.session.commit()
+
+            return {'message': 'user deleted'}
+        
+        except Exception as e:
+            return {'error': str(e)}, 500
+
+    else:
+        return {'error': {'message': 'Unauthorized'}}, 401
 
 @auth_routes.route('/unauthorized')
 def unauthorized():

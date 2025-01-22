@@ -12,6 +12,9 @@ export const thunkAuthenticate = createAsyncThunk(
     try {
       const res = await fetch("/api/auth/");
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in Returning Current User");
@@ -45,6 +48,9 @@ export const thunkLogout = createAsyncThunk(
     try {
       const res = await fetch("/api/auth/logout");
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data.message;
     } catch (error) {
       return rejectWithValue(error.message || "Logout Error");
@@ -60,6 +66,44 @@ export const thunkSignup = createAsyncThunk(
         method: "POST",
         headers: {"Content-Type": "application/json"},
         body: JSON.stringify({ username, email, password }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Signup Error");
+    }
+  }
+)
+
+export const thunkEditUser = createAsyncThunk(
+  "session/editUser",
+  async ({ id, username, email }, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/auth/user/${id}/edit`, {
+        method: "PUT",
+        headers: {"Content-Type": "application/json"},
+        body: JSON.stringify({ username, email }),
+      });
+      const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
+      return data;
+    } catch (error) {
+      return rejectWithValue(error.message || "Signup Error");
+    }
+  }
+)
+
+export const thunkDeleteUser = createAsyncThunk(
+  "session/deleteUser",
+  async (id, { rejectWithValue }) => {
+    try {
+      const res = await fetch(`/api/auth/user/${id}/delete`, {
+        method: "DELETE"
       });
       const data = await res.json();
       if (!res.ok) {
@@ -125,6 +169,30 @@ const sessionSlice = createSlice({
       .addCase(thunkSignup.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+      })
+      .addCase(thunkEditUser.pending, (state) => {
+        state.loading = true;
+        state.errors = null;
+      })
+      .addCase(thunkEditUser.rejected, (state, action) => {
+        state.loading = false;
+        state.errors = action.payload;
+      })
+      .addCase(thunkEditUser.fulfilled, (state, action) => {
+        state.loading = false;
+        state.user = action.payload;
+      })
+      .addCase(thunkDeleteUser.pending, (state) => {
+        state.loading = true;
+        state.errors = null;
+      })
+      .addCase(thunkDeleteUser.rejected, (state, action) => {
+        state.loading = false;
+        state.errors = action.payload;
+      })
+      .addCase(thunkDeleteUser.fulfilled, (state) => {
+        state.loading = false;
+        state.user = null;
       })
   }
 });

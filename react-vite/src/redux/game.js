@@ -20,6 +20,9 @@ export const createRequest = createAsyncThunk(
         body: JSON.stringify({ opponentID, hostColor }),
       });
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Game Request Error");
@@ -33,6 +36,9 @@ export const getRequestsFor = createAsyncThunk(
     try {
       const res = await fetch('/api/game/request/get');
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in getting requests")
@@ -46,6 +52,9 @@ export const getRequestTo = createAsyncThunk(
     try {
       const res = await fetch('/api/game/request/self');
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in getting request")
@@ -57,9 +66,13 @@ export const cancelRequest = createAsyncThunk(
   "game/deleteRequest",
   async (id, { rejectWithValue }) => {
     try {
-      await fetch(`/api/game/request/delete/${id}`, {
+      const res = await fetch(`/api/game/request/delete/${id}`, {
         method: "DELETE",
       });
+      const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return;
     } catch (error) {
       return rejectWithValue(error.message || "Delete request failed");
@@ -82,6 +95,9 @@ export const createGame = createAsyncThunk(
         })
       });
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in Creating Game");
@@ -95,6 +111,9 @@ export const getGame = createAsyncThunk(
     try {
       const res = await fetch(`/api/game/get/${id}`);
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in Returning Game");
@@ -108,6 +127,9 @@ export const getActive = createAsyncThunk(
     try {
       const res = await fetch('/api/game/active');
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in Returning Game");
@@ -127,6 +149,9 @@ export const updateGame = createAsyncThunk(
         })
       });
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in updating game");
@@ -146,6 +171,9 @@ export const updateGameTiles = createAsyncThunk(
         })
       });
       const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return data;
     } catch (error) {
       return rejectWithValue(error.message || "Error in updating game");
@@ -157,9 +185,13 @@ export const cancelGame = createAsyncThunk(
   "game/deleteGame",
   async (id, { rejectWithValue }) => {
     try {
-      await fetch(`/api/game/delete/${id}`, {
+      const res = await fetch(`/api/game/delete/${id}`, {
         method: "DELETE",
       });
+      const data = await res.json();
+      if (!res.ok) {
+        return rejectWithValue(data);
+      }
       return;
     } catch (error) {
       return rejectWithValue(error.message || "Delete request failed");

@@ -1,23 +1,23 @@
-.signup-modal {
+.delete-user {
   font-family: "Calibri", sans-serif;
   padding: 45px 35px;
 }
 
-.signup-modal h1 {
+.delete-user h1 {
   margin: 0px 0px 20px;
 }
 
-.signup-modal form {
+.delete-user form {
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 
-.signup-modal input {
+.delete-user input {
   margin: 0px 0px 0px 5px
 }
 
-.signup-modal button {
+.delete-user button {
   width: 150px;
   height: 30px;
   margin: 20px 0px 0px;

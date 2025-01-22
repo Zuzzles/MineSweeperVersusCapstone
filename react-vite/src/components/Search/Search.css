@@ -1,0 +1,13 @@
+.search-box {
+  border: 1px solid;
+  padding: 15px;
+  min-width: 360px;
+}
+
+.search-box input {
+  margin: 15px 5px 0px
+}
+
+.search-box ul {
+  padding: 0px 0px 0px 20px;
+}

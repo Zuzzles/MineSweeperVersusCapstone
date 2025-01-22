@@ -1,0 +1,38 @@
+.friends-page {
+  font-family: "Calibri", sans-serif;
+  display: flex;
+  gap: 20px;
+  justify-content: space-between;
+  padding: 15px;
+}
+
+.friends-page h2 {
+  margin: 0px;
+}
+
+.friends-and-requests {
+  min-width: 189px;
+}
+
+.friends-and-requests h2 {
+  margin: 15px 0px 10px;
+  border-bottom: 1px solid;
+}
+
+.friends-and-requests ul {
+  padding: 0px 0px 0px 20px;
+  gap: 5px;
+}
+
+.request-list-item {
+  display: flex;
+  flex-direction: column;
+  list-style-type: none;
+}
+
+.friend-list-item {
+  display: flex;
+  list-style-type: none;
+  align-items: center;
+  gap: 5px;
+}

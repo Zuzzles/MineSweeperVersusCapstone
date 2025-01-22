@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import { getFriendDetails } from "../../redux/friend";
 import { OpenModalMenuItem } from "../Navigation";
 import IssueFormModal from "./IssueChallengeFormModal";
+import SearchComponent from "../Search/SearchComponent";
 import './IssueChallenge.css';
 
 function IssuePage() {
   const dispatch = useDispatch();
   const { details, loading } = useSelector((store) => store.friends)
-  // const [searchResults, setSearchResults] = useState([])
 
   // TODO: css styling
   // TODO: get search working
@@ -16,12 +16,6 @@ function IssuePage() {
   useEffect(() => {
     dispatch(getFriendDetails());
   }, [dispatch]);
-
-  const handleSearch = async (e) => {
-    e.preventDefault();
-
-
-  }
 
   return (
     <div className='challenge-page'>
@@ -37,25 +31,7 @@ function IssuePage() {
           )}
         </ul>
       </div>
-      <div className='search-opponent'>
-        <h2>Search Opponent by Username</h2>
-        <form onSubmit={handleSearch}>
-          <input />
-          <button type="submit">Find Friend</button>
-        </form>
-        <div>
-          <h3>Results</h3>
-          <ul>
-          {/* {searchResults?.length === 0 ? (<p>No Results</p>) : (
-            searchResults?.map((request, i) => 
-              <li key={i}>
-                {request.username}
-                <button>Send Request</button>
-              </li>)
-          )} */}
-          </ul>
-        </div>
-      </div>
+      <SearchComponent data={details?.list} friend={false}/>
     </div>
   )
 }
