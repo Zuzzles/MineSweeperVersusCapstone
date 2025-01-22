@@ -6,7 +6,7 @@
   justify-content: center;
   height: 98vh;
   gap: 20px;
-  background-image: url("../../../public/images/background_2.jpg");
+  background-image: url("/images/background_2.jpg");
 }
 
 .login-page h1 {

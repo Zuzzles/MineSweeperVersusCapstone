@@ -65,11 +65,11 @@ function GamePage() {
           }
           if (!localGameData || localGameData.length === 0) setLocalGame(res.payload.game_tiles)
           for (let i = 0; i < res.payload.game_tiles.length; i++) {
-            if (res.payload.game_tiles[i].seen !== localGameData[i].seen) {
+            if (res.payload.game_tiles[i]?.seen !== localGameData[i].seen) {
               setLocalGame(res.payload.game_tiles)
               break;
             }
-            if (res.payload.game_tiles[i].flag_color !== localGameData[i].flag_color) {
+            if (res.payload.game_tiles[i]?.flag_color !== localGameData[i].flag_color) {
               setLocalGame(res.payload.game_tiles)
               break;
             }
@@ -82,7 +82,7 @@ function GamePage() {
       });
     }, 200);
     return () => clearInterval(dispatchIntervalID);
-  }, [dispatch, navigate, id, lives, opponentScore, userScore, user, init]); //game was causing infinite loop
+  }, [dispatch, navigate, id, lives, opponentScore, userScore, user, init, localGameData]); //game was causing infinite loop
 
   const life_cases = (lives) => {
     switch (lives) {
@@ -127,16 +127,29 @@ function GamePage() {
         {life_cases(lives)}
       </div>
       <div className="game-box-div">
-        <div className="score-box">
-          <div className="score-card">
-            <p>Your Score</p>
-            <div>{userScore}</div>
+        {user?.id == init?.host_id ? (
+          <div className="score-box">
+            <div className="score-card" style={{'backgroundColor': `${init?.host_color}`}}>
+              <p>Your Score</p>
+              <div>{userScore}</div>
+            </div>
+            <div className="score-card" style={{'backgroundColor': `${init?.opponent_color}`}}>
+              <p>Opponent Score</p>
+              <div>{opponentScore}</div>
+            </div>
           </div>
-          <div className="score-card">
-            <p>Opponent Score</p>
-            <div>{opponentScore}</div>
-        </div>
-        </div>
+        ) : (
+          <div className="score-box">
+            <div className="score-card" style={{'backgroundColor': `${init?.opponent_color}`}}>
+              <p>Your Score</p>
+              <div>{userScore}</div>
+            </div>
+            <div className="score-card" style={{'backgroundColor': `${init?.host_color}`}}>
+              <p>Opponent Score</p>
+              <div>{opponentScore}</div>
+            </div>
+          </div>
+        )}
         {gameOver ? (
           <div className="game-over-div">
             Game Over
