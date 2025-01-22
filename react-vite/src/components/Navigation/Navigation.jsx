@@ -29,13 +29,11 @@ function Navigation() {
       <div className="navbar-right">
         {init ? (
           <NavLink to={`/game/${init.id}`}>Active Game</NavLink>
-        ) : null}
-        {!init && requestTo ? (
+        ) : requestTo ? (
           <NavLink to={"/waiting"}>Waiting Room</NavLink>
-        ) : null}
-        {!init && !requestTo && requestsFor?.length !== 0 ? (
+        ) : requestsFor?.length !== 0 ? (
           <NavLink to={"/challenges"}>Game Requests</NavLink>
-        ) : null}
+        ) : <p>Waiting for a game request? Refresh your page!</p>} 
         <ProfileButton />
       </div>
     </div>
